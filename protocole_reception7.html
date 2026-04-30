@@ -1,0 +1,2484 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="theme-color" content="#1a2744">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Protocole Réception">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAIAAADdvvtQAAABZUlEQVR42u3SQQ0AAAjEsNOBAYzgXxMWCO8mVbAs1QNvkQADYSAMhIHAQBgIA2EgMBAGwkAYCAyEgTAQBgIDYSAMhIEwEBgIA2EgDAQGwkAYCAOBgTAQBsJAYCAMhIEwEAYCA2EgDISBwEAYCANhIDAQBsJAGAgMhIEwEAYCA2EgDISBMBAYCANhIAwEBsJAGAgDgYEwEAbCQGAgDISBMBAGAgNhIAyEgcBAGAgDYSAwEAbCQBgIDISBMBAGwkBgIAyEgTAQGAgDYSAMBAbCQBgIA4GBMBAGwkBgIAyEgTAQBgIDYSAMhIHAQBgIA2EgMBAGwkAYCAyEgTAQBsJAYCAMhIEwEBgIA2EgDAQGwkAYCAOBgTAQBsJAGEgFDISBMBAGAgNhIAyEgcBAGAgDYSAwEAbCQBgIDISBMBAGwkBgIAyEgTAQGAgDYSAMBAbCQBgIA4GBMBAGwkAYCAyEgTAQBoKrBcRU1Fd9Xm35AAAAAElFTkSuQmCC">
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAIAAADdvvtQAAABZUlEQVR42u3SQQ0AAAjEsNOBAYzgXxMWCO8mVbAs1QNvkQADYSAMhIHAQBgIA2EgMBAGwkAYCAyEgTAQBgIDYSAMhIEwEBgIA2EgDAQGwkAYCAOBgTAQBsJAYCAMhIEwEAYCA2EgDISBwEAYCANhIDAQBsJAGAgMhIEwEAYCA2EgDISBMBAYCANhIAwEBsJAGAgDgYEwEAbCQGAgDISBMBAGAgNhIAyEgcBAGAgDYSAwEAbCQBgIDISBMBAGwkBgIAyEgTAQGAgDYSAMBAbCQBgIA4GBMBAGwkBgIAyEgTAQBgIDYSAMhIHAQBgIA2EgMBAGwkAYCAyEgTAQBsJAYCAMhIEwEBgIA2EgDAQGwkAYCAOBgTAQBsJAGEgFDISBMBAGAgNhIAyEgcBAGAgDYSAwEAbCQBgIDISBMBAGwkBgIAyEgTAQGAgDYSAMBAbCQBgIA4GBMBAGwkAYCAyEgTAQBoKrBcRU1Fd9Xm35AAAAAElFTkSuQmCC">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Protocole de Réception – SIA 118</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;0,700;1,300&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --navy: #1a2744;
+    --navy-light: #243460;
+    --accent: #c8392b;
+    --accent-soft: #f5e8e7;
+    --gold: #c9a84c;
+    --surface: #f7f6f3;
+    --white: #ffffff;
+    --border: #d8d4cc;
+    --text: #1a1a1a;
+    --muted: #6b6560;
+    --success: #2d6a4f;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--surface);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  /* HEADER */
+  .page-header {
+    background: var(--navy);
+    color: white;
+    padding: 28px 40px 24px;
+    display: flex;
+    align-items: flex-end;
+    gap: 24px;
+    border-bottom: 4px solid var(--gold);
+  }
+  .page-header .logo-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .page-header .logo-block img {
+    height: 52px;
+    width: auto;
+    background: white;
+    border-radius: 3px;
+    padding: 5px 10px;
+    display: block;
+  }
+  .page-header .doc-title {
+    margin-left: auto;
+    text-align: right;
+  }
+  .page-header .doc-title h1 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: white;
+  }
+  .page-header .doc-title p {
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.5px;
+    margin-top: 3px;
+  }
+
+  /* HEADER CONTROLS */
+  .header-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 16px;
+    flex-shrink: 0;
+  }
+  .lang-selector {
+    display: flex;
+    gap: 3px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+    padding: 3px;
+  }
+  .lang-btn {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.55);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 5px 9px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .lang-btn:hover { color: white; background: rgba(255,255,255,0.15); }
+  .lang-btn.lang-active { background: var(--gold); color: var(--navy); }
+  .help-btn {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    border: 2px solid rgba(255,255,255,0.3);
+    color: white;
+    font-family: 'Source Serif 4', serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .help-btn:hover { background: var(--gold); border-color: var(--gold); color: var(--navy); }
+
+  /* HELP MODAL */
+  .help-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(10,18,40,0.6);
+    z-index: 600;
+    align-items: flex-start;
+    justify-content: center;
+    overflow-y: auto;
+    padding: 20px;
+  }
+  .help-overlay.open { display: flex; }
+  .help-modal {
+    background: white;
+    border-radius: 3px;
+    width: 100%; max-width: 560px;
+    margin: auto;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.3);
+    overflow: hidden;
+  }
+  .help-modal-header {
+    background: var(--navy);
+    padding: 20px 24px;
+    display: flex; align-items: flex-start; justify-content: space-between;
+    border-bottom: 3px solid var(--gold);
+  }
+  .help-modal-header h2 { font-family: 'Source Serif 4',serif; font-size:17px; color:white; font-weight:600; }
+  .help-modal-header p { font-size:11px; color:rgba(255,255,255,0.5); margin-top:3px; }
+  .help-modal-body { padding: 24px; max-height: 70vh; overflow-y: auto; }
+  .help-section { margin-bottom: 20px; }
+  .help-section h3 { font-size:13px; font-weight:700; color:var(--navy); margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid var(--border); }
+  .help-section p, .help-section li { font-size:13px; color:var(--text); line-height:1.6; }
+  .help-section ol, .help-section ul { padding-left:18px; display:flex; flex-direction:column; gap:5px; margin-top:6px; }
+  .help-install-box { background:var(--surface); border:1px solid var(--border); border-radius:2px; padding:14px; margin-top:8px; font-size:13px; line-height:1.6; }
+  .help-link { background: var(--surface); border: 1px solid var(--border); border-radius:2px; padding:10px 14px; font-size:12px; font-family:monospace; color:var(--navy); word-break:break-all; margin-top:6px; }
+  .help-modal-footer { padding:16px 24px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; }
+
+  /* PROGRESS BAR */
+  .progress-bar-wrapper {
+    background: var(--navy-light);
+    padding: 14px 40px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    overflow-x: auto;
+  }
+  .step-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    cursor: pointer;
+    white-space: nowrap;
+    -webkit-tap-highlight-color: transparent;
+    padding: 4px 0;
+  }
+  .step-indicator .step-circle {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    border: 2px solid rgba(255,255,255,0.3);
+    color: rgba(255,255,255,0.6);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600;
+    transition: all 0.3s;
+    flex-shrink: 0;
+  }
+  .step-indicator .step-label {
+    margin-left: 8px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    font-weight: 400;
+    transition: color 0.3s;
+  }
+  .step-connector {
+    flex: 1; min-width: 24px; max-width: 60px;
+    height: 1px;
+    background: rgba(255,255,255,0.2);
+    margin: 0 12px;
+  }
+  .step-indicator.active .step-circle {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--navy);
+  }
+  .step-indicator.active .step-label { color: white; font-weight: 500; }
+  .step-indicator.done .step-circle {
+    background: rgba(201,168,76,0.3);
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+  .step-indicator.done .step-label { color: rgba(255,255,255,0.7); }
+
+  /* MAIN */
+  main { max-width: 900px; margin: 0 auto; padding: 36px 20px 60px; }
+
+  .section-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    margin-bottom: 24px;
+    overflow: hidden;
+    display: none;
+    animation: fadeSlide 0.4s ease;
+  }
+  .section-card.active { display: block; }
+
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    background: var(--navy);
+    color: white;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-header .section-num {
+    font-family: 'Source Serif 4', serif;
+    font-size: 24px;
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .section-header h2 {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+  }
+
+  .section-body { padding: 28px 24px; }
+
+  /* FORM ELEMENTS */
+  .field-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 28px;
+  }
+  .field-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .field-grid.cols-1 { grid-template-columns: 1fr; }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .field.span-2 { grid-column: span 2; }
+  .field.span-3 { grid-column: span 3; }
+
+  label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  label .required { color: var(--accent); margin-left: 2px; }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="date"],
+  input[type="tel"],
+  select,
+  textarea {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    padding: 10px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    border-radius: 1px;
+    transition: border-color 0.2s, background 0.2s;
+    width: 100%;
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--navy);
+    background: white;
+  }
+  textarea { resize: vertical; min-height: 80px; }
+
+  /* RADIO / CHECKBOX GROUPS */
+  .radio-group, .checkbox-group {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-top: 4px;
+  }
+  .radio-group label, .checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--text);
+    cursor: pointer;
+  }
+  .radio-group input[type="radio"],
+  .checkbox-group input[type="checkbox"] {
+    width: 16px; height: 16px;
+    accent-color: var(--navy);
+    cursor: pointer;
+  }
+
+  /* RESULT CARDS */
+  .result-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 8px;
+  }
+  .result-card {
+    border: 2px solid var(--border);
+    border-radius: 2px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .result-card input[type="radio"] { display: none; }
+  .result-card .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .result-card .card-ref {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+  }
+  .result-card.selected-ok { border-color: var(--success); background: #edf7f1; }
+  .result-card.selected-ok .card-title { color: var(--success); }
+  .result-card.selected-sec { border-color: var(--gold); background: #fdf9f0; }
+  .result-card.selected-sec .card-title { color: #9a6f1a; }
+  .result-card.selected-maj { border-color: var(--accent); background: var(--accent-soft); }
+  .result-card.selected-maj .card-title { color: var(--accent); }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 24px 0;
+  }
+
+  /* PERSONS BLOCK */
+  .persons-block { display: flex; flex-direction: column; gap: 12px; }
+  .person-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 12px;
+    align-items: end;
+  }
+  .btn-add-person {
+    background: none;
+    border: 1px dashed var(--border);
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 8px;
+    border-radius: 1px;
+  }
+  .btn-add-person:hover { border-color: var(--navy); color: var(--navy); }
+  .btn-remove {
+    background: none;
+    border: 1px solid #e0d9d0;
+    color: var(--muted);
+    width: 34px; height: 34px;
+    border-radius: 1px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .btn-remove:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ANNEXES */
+  .annexe-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .annexe-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 1px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 13px;
+  }
+  .annexe-item:hover { border-color: var(--navy); background: var(--surface); }
+  .annexe-item input { accent-color: var(--navy); }
+
+  /* SIGNATURES */
+  .signatures-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin-top: 12px;
+  }
+  .sig-block {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .sig-block .sig-title {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .sig-block canvas {
+    border: 1px solid var(--border);
+    background: white;
+    cursor: crosshair;
+    display: block;
+    touch-action: none;
+    border-radius: 1px;
+    width: 100%;
+    height: 100px;
+  }
+  .sig-clear {
+    font-size: 11px;
+    color: var(--muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+    text-align: left;
+    font-family: 'DM Sans', sans-serif;
+    padding: 0;
+  }
+  .sig-clear:hover { color: var(--accent); }
+
+  /* NAVIGATION */
+  .nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  .btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 11px 24px;
+    border: none;
+    cursor: pointer;
+    border-radius: 1px;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-secondary {
+    background: white;
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+  .btn-secondary:hover { border-color: var(--navy); }
+  .btn-primary {
+    background: var(--navy);
+    color: white;
+  }
+  .btn-primary:hover { background: var(--navy-light); }
+  .btn-accent {
+    background: var(--accent);
+    color: white;
+  }
+  .btn-accent:hover { background: #a82c1f; }
+  .btn-success {
+    background: var(--success);
+    color: white;
+  }
+
+  /* SUMMARY */
+  .summary-section { margin-bottom: 20px; }
+  .summary-section h3 {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .summary-row {
+    display: flex;
+    gap: 12px;
+    padding: 6px 0;
+    border-bottom: 1px solid #f0ede8;
+    font-size: 13px;
+  }
+  .summary-row .s-label { color: var(--muted); min-width: 180px; flex-shrink: 0; }
+  .summary-row .s-val { font-weight: 500; }
+
+  .result-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .badge-ok { background: #edf7f1; color: var(--success); }
+  .badge-sec { background: #fdf9f0; color: #9a6f1a; }
+  .badge-maj { background: var(--accent-soft); color: var(--accent); }
+
+  /* FINAL ACTIONS */
+  .final-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 24px;
+  }
+
+  /* VALIDATION ERRORS */
+  .field-error {
+    border-color: var(--accent) !important;
+    background: #fff5f5 !important;
+    animation: shake 0.3s ease;
+  }
+  .card-error {
+    border-color: var(--accent) !important;
+    animation: shake 0.3s ease;
+  }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+  input.field-error:focus, textarea.field-error:focus {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 3px rgba(200,57,43,0.15);
+  }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 30px; right: 30px;
+    background: var(--navy);
+    color: white;
+    padding: 14px 22px;
+    border-radius: 2px;
+    font-size: 13px;
+    font-weight: 500;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 1000;
+    border-left: 4px solid var(--gold);
+    max-width: 340px;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* ── TABLET (≤900px) ───────────────────────────────────── */
+  @media (max-width: 900px) {
+    .page-header { padding: 20px 24px; }
+    .page-header .logo-block img { height: 44px; }
+    .page-header .doc-title h1 { font-size: 17px; }
+    .progress-bar-wrapper { padding: 12px 24px; }
+    main { padding: 24px 16px 60px; }
+    .field-grid.cols-3 { grid-template-columns: 1fr 1fr; }
+    .signatures-grid { grid-template-columns: 1fr 1fr; }
+    .signatures-grid .sig-block:last-child { grid-column: span 2; }
+    .result-cards { grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  }
+
+  /* ── MOBILE (≤600px) ────────────────────────────────────── */
+  @media (max-width: 600px) {
+    /* Header */
+    .page-header {
+      padding: 14px 16px;
+      flex-direction: row;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .page-header .logo-block img { height: 36px; padding: 3px 6px; }
+    .page-header .doc-title { margin-left: auto; text-align: right; }
+    .page-header .doc-title h1 { font-size: 14px; }
+    .page-header .doc-title p { font-size: 9px; }
+
+    /* Progress bar — circles only, no labels */
+    .progress-bar-wrapper { padding: 10px 12px; gap: 0; }
+    .step-label { display: none; }
+    .step-indicator .step-circle { width: 32px; height: 32px; font-size: 13px; }
+    .step-connector { min-width: 10px; margin: 0 4px; }
+
+    /* Main */
+    main { padding: 16px 10px 80px; }
+
+    /* Section header */
+    .section-header { padding: 12px 16px; }
+    .section-header .section-num { font-size: 20px; }
+    .section-header h2 { font-size: 12px; }
+    .section-body { padding: 20px 14px; }
+
+    /* Fields — all single column */
+    .field-grid,
+    .field-grid.cols-3,
+    .field-grid.cols-1 { grid-template-columns: 1fr; gap: 16px; }
+    .field.span-2, .field.span-3 { grid-column: span 1; }
+
+    /* Larger touch targets for inputs */
+    input[type="text"],
+    input[type="email"],
+    input[type="date"],
+    input[type="tel"],
+    select,
+    textarea {
+      padding: 12px 14px;
+      font-size: 16px; /* prevents iOS zoom on focus */
+      border-radius: 4px;
+    }
+    label { font-size: 11px; }
+
+    /* Result cards — vertical stack */
+    .result-cards { grid-template-columns: 1fr; gap: 10px; }
+    .result-card { padding: 14px 16px; }
+    .result-card .card-title { font-size: 14px; }
+
+    /* Radio/checkbox groups */
+    .radio-group { flex-direction: column; gap: 12px; }
+    .radio-group label, .checkbox-group label { font-size: 15px; gap: 12px; }
+    .radio-group input[type="radio"],
+    .checkbox-group input[type="checkbox"] { width: 20px; height: 20px; }
+
+    /* Persons */
+    .person-row { grid-template-columns: 1fr; gap: 10px; }
+    .person-row .btn-remove { width: 100%; height: 40px; }
+
+    /* Annexes */
+    .annexe-grid { grid-template-columns: 1fr; }
+    .annexe-item { padding: 14px; font-size: 15px; }
+    .annexe-item input { width: 20px; height: 20px; }
+
+    /* Signatures */
+    .signatures-grid { grid-template-columns: 1fr; gap: 20px; }
+    .sig-block canvas { height: 130px; }
+
+    /* Nav bar */
+    .nav-bar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 16px;
+      background: white;
+      border-top: 2px solid var(--border);
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.10);
+      z-index: 200;
+      margin-top: 0;
+      padding-bottom: max(12px, env(safe-area-inset-bottom));
+    }
+    .nav-bar .btn { flex: 1; justify-content: center; padding: 14px 10px; font-size: 15px; min-height: 50px; }
+    .nav-bar .btn:only-child { max-width: 100%; }
+    /* Extra bottom padding on section so content isn't hidden behind fixed nav */
+    .section-body { padding-bottom: 90px; }
+    /* Header controls on mobile */
+    .page-header { flex-wrap: wrap; }
+    .header-controls { margin-left: 0; width: 100%; justify-content: space-between; }
+    .help-btn { width: 40px; height: 40px; font-size: 18px; }
+    .lang-btn { padding: 7px 12px; font-size: 12px; }
+
+    /* Final actions */
+    .final-actions { flex-direction: column; }
+    .final-actions .btn { width: 100%; justify-content: center; padding: 15px; font-size: 15px; }
+
+    /* Summary */
+    .summary-row { flex-direction: column; gap: 2px; }
+    .summary-row .s-label { min-width: unset; font-size: 11px; }
+    .summary-row .s-val { font-size: 13px; }
+
+    /* Toast */
+    .toast { bottom: 16px; right: 10px; left: 10px; max-width: unset; font-size: 13px; }
+
+    /* Divider spacing */
+    .divider { margin: 18px 0; }
+
+    /* Buttons general */
+    .btn { min-height: 46px; }
+    .btn-add-person { width: 100%; padding: 12px; font-size: 14px; }
+  }
+
+  /* ── SMALL MOBILE (≤380px) ──────────────────────────────── */
+  @media (max-width: 380px) {
+    .page-header .doc-title h1 { font-size: 13px; }
+    .step-indicator .step-circle { width: 28px; height: 28px; font-size: 12px; }
+    .step-connector { min-width: 6px; margin: 0 2px; }
+    main { padding: 12px 8px 80px; }
+    .section-body { padding: 16px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="logo-block"><img src="data:image/png;base64,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" alt="Johnson Controls / Tyco"></div>
+  <div class="doc-title">
+    <h1 data-i18n="app_title">Protocole de Réception</h1>
+    <p data-i18n="app_subtitle">Réception selon art. 157ff. Norme SIA 118</p>
+  </div>
+  <div class="header-controls">
+    <div class="lang-selector">
+      <button class="lang-btn lang-active" data-lang="fr" onclick="changeLang('fr')">FR</button>
+      <button class="lang-btn" data-lang="de" onclick="changeLang('de')">DE</button>
+      <button class="lang-btn" data-lang="en" onclick="changeLang('en')">EN</button>
+    </div>
+    <button class="help-btn" onclick="openHelp()" title="Aide">
+      <span>?</span>
+    </button>
+  </div>
+</div>
+
+<div class="progress-bar-wrapper">
+  <div class="step-indicator active" id="si1" onclick="goToStep(1)">
+    <div class="step-circle" id="sc1">1</div>
+    <span class="step-label" data-i18n="step1_label">Identification</span>
+  </div>
+  <div class="step-connector"></div>
+  <div class="step-indicator" id="si2" onclick="goToStep(2)">
+    <div class="step-circle" id="sc2">2</div>
+    <span class="step-label" data-i18n="step2_label">Protocole de test</span>
+  </div>
+  <div class="step-connector"></div>
+  <div class="step-indicator" id="si3" onclick="goToStep(3)">
+    <div class="step-circle" id="sc3">3</div>
+    <span class="step-label" data-i18n="step3_label">Instruction &amp; Annexes</span>
+  </div>
+  <div class="step-connector"></div>
+  <div class="step-indicator" id="si4" onclick="goToStep(4)">
+    <div class="step-circle" id="sc4">4</div>
+    <span class="step-label" data-i18n="step4_label">Signatures</span>
+  </div>
+  <div class="step-connector"></div>
+  <div class="step-indicator" id="si5" onclick="goToStep(5)">
+    <div class="step-circle" id="sc5">5</div>
+    <span class="step-label" data-i18n="step5_label">Récapitulatif</span>
+  </div>
+</div>
+
+<main>
+
+  <!-- STEP 1: IDENTIFICATION -->
+  <div class="section-card active" id="step1">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <h2 data-i18n="step1_title">Identification du projet</h2>
+    </div>
+    <div class="section-body">
+      <div class="field-grid">
+        <div class="field span-2">
+          <label>Projet <span class="required">*</span></label>
+          <input type="text" id="projet" placeholder="Nom du projet" autocomplete="off">
+        </div>
+        <div class="field span-2">
+          <label>Maître d'œuvre <span class="required">*</span></label>
+          <input type="text" id="maitre" placeholder="Nom du maître d'œuvre" autocomplete="organization">
+        </div>
+        <div class="field">
+          <label>Chef de projet <span class="required">*</span></label>
+          <input type="text" id="chef_projet" value="Pittet Norbert" placeholder="Nom du chef de projet" autocomplete="name">
+        </div>
+        <div class="field">
+          <label>Remplacé par (M. / Mme)</label>
+          <input type="text" id="remplace_par" placeholder="Prénom Nom">
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="field-grid">
+        <div class="field span-2">
+          <label>Entrepreneur <span class="required">*</span></label>
+          <input type="text" id="entrepreneur" value="Tyco Integrated Fire &amp; Security SA">
+        </div>
+        <div class="field">
+          <label>Contrat de travail du <span class="required">*</span></label>
+          <input type="date" id="contrat_date">
+        </div>
+        <div class="field">
+          <label>N° d'offre <span class="required">*</span></label>
+          <input type="text" id="no_offre" placeholder="10015xxxx">
+        </div>
+        <div class="field">
+          <label>Cluster <span class="required">*</span></label>
+          <input type="text" id="cluster" placeholder="Caxxx">
+        </div>
+        <div class="field">
+          <label>V/Réf.</label>
+          <input type="text" id="vref" placeholder="Votre référence">
+        </div>
+        <div class="field span-2">
+          <label>Concerne travaux <span class="required">*</span></label>
+          <input type="text" id="travaux" value="Détection Incendie" placeholder="Nature des travaux">
+        </div>
+        <div class="field">
+          <label>N° de projet <span class="required">*</span></label>
+          <input type="text" id="no_projet" placeholder="Numéro de projet">
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="field">
+        <label>Matériel non couvert par la garantie (livré par des tiers ou mis à disposition par le commettant)</label>
+        <textarea id="materiel_tiers" placeholder="Décrire le matériel exclu de la garantie..."></textarea>
+      </div>
+
+      <div class="nav-bar">
+        <div></div>
+        <button class="btn btn-primary" onclick="goToStep(2)" data-i18n="btn_next">Suivant →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2: PROTOCOLE DE TEST -->
+  <div class="section-card" id="step2">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <h2 data-i18n="step2_title">Protocole de test</h2>
+    </div>
+    <div class="section-body">
+      <div class="field-grid">
+        <div class="field">
+          <label>Date de l'essai de réception <span class="required">*</span></label>
+          <input type="date" id="essai_date">
+        </div>
+        <div class="field">
+          <label>Exécuté par</label>
+          <input type="text" id="essai_par" placeholder="Nom du responsable">
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="field-grid cols-1">
+        <div class="field">
+          <label>M.S. Centrale (mise en service centrale)</label>
+          <div class="radio-group">
+            <label><input type="radio" name="ms_centrale" value="OUI"> OUI</label>
+            <label><input type="radio" name="ms_centrale" value="NON" checked> NON</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>M.S. Installation (mise en service installation)</label>
+          <div class="radio-group">
+            <label><input type="radio" name="ms_installation" value="OUI" checked> OUI</label>
+            <label><input type="radio" name="ms_installation" value="NON"> NON</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <label style="display:block; margin-bottom:12px;">Résultat <span class="required" style="font-size:10px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted)"> — Sélectionner le résultat</span></label>
+      <div class="result-cards">
+        <div class="result-card" id="rc-ok" onclick="selectResult('ok')">
+          <input type="radio" name="resultat" value="ok">
+          <div class="card-title">✓ Pas de défaut</div>
+          <div class="card-ref">Art. 159</div>
+        </div>
+        <div class="result-card" id="rc-sec" onclick="selectResult('sec')">
+          <input type="radio" name="resultat" value="sec">
+          <div class="card-title">⚠ Défauts secondaires</div>
+          <div class="card-ref">Art. 160</div>
+        </div>
+        <div class="result-card" id="rc-maj" onclick="selectResult('maj')">
+          <input type="radio" name="resultat" value="maj">
+          <div class="card-title">✗ Défauts majeurs</div>
+          <div class="card-ref">Art. 161</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="field-grid cols-1">
+        <div class="field">
+          <label>Remarques</label>
+          <textarea id="remarques" rows="4" placeholder="Observations, commentaires..."></textarea>
+        </div>
+        <div class="field">
+          <label>Délai pour remise en état</label>
+          <input type="text" id="delai_remise" placeholder="ex: 30 jours dès signature">
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="field">
+        <label>État de la remise</label>
+        <div class="radio-group" style="flex-direction: column; gap:10px;">
+          <label><input type="radio" name="etat_remise" value="remise"> L'installation est remise (Art. 159, 160)</label>
+          <label><input type="radio" name="etat_remise" value="reportee"> La remise est reportée à une date ultérieure (Art. 161)</label>
+        </div>
+      </div>
+
+      <div class="nav-bar">
+        <button class="btn btn-secondary" onclick="goToStep(1)" data-i18n="btn_prev">← Retour</button>
+        <button class="btn btn-primary" onclick="goToStep(3)" data-i18n="btn_next">Suivant →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3: INSTRUCTION & ANNEXES -->
+  <div class="section-card" id="step3">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <h2 data-i18n="step3_title">Instruction &amp; Annexes</h2>
+    </div>
+    <div class="section-body">
+
+      <label style="display:block; margin-bottom:12px;">Instruction donnée à (min. 2 personnes, nom + N° de tél.)</label>
+      <div class="persons-block" id="persons-block">
+        <div class="person-row">
+          <div class="field">
+            <label>Nom</label>
+            <input type="text" placeholder="Prénom Nom" class="person-name">
+          </div>
+          <div class="field">
+            <label>Téléphone</label>
+            <input type="tel" placeholder="+41 xx xxx xx xx" class="person-tel">
+          </div>
+          <button class="btn-remove" onclick="removePerson(this)" title="Supprimer">×</button>
+        </div>
+        <div class="person-row">
+          <div class="field">
+            <label>Nom</label>
+            <input type="text" placeholder="Prénom Nom" class="person-name">
+          </div>
+          <div class="field">
+            <label>Téléphone</label>
+            <input type="tel" placeholder="+41 xx xxx xx xx" class="person-tel">
+          </div>
+          <button class="btn-remove" onclick="removePerson(this)" title="Supprimer">×</button>
+        </div>
+      </div>
+      <button class="btn-add-person" onclick="addPerson()">+ Ajouter une personne</button>
+
+      <div class="divider"></div>
+
+      <label style="display:block; margin-bottom:12px;">Annexes jointes</label>
+      <div class="annexe-grid">
+        <label class="annexe-item">
+          <input type="checkbox" id="ann-docs"> Documents techniques révisés
+        </label>
+        <label class="annexe-item">
+          <input type="checkbox" id="ann-mode"> Mode d'emploi, prescriptions
+        </label>
+        <label class="annexe-item">
+          <input type="checkbox" id="ann-cahier"> Cahier de contrôle
+        </label>
+        <label class="annexe-item">
+          <input type="checkbox" id="ann-plan"> Plan pompiers
+        </label>
+        <label class="annexe-item">
+          <input type="checkbox" id="ann-autre"> Autre(s)
+        </label>
+      </div>
+      <div class="field" style="margin-top:12px;">
+        <label>Précisions / autres annexes</label>
+        <input type="text" id="ann-precision" placeholder="Décrire si nécessaire...">
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="field-grid">
+        <div class="field">
+          <label>Lieu de signature</label>
+          <input type="text" id="lieu" placeholder="Ville">
+        </div>
+        <div class="field">
+          <label>Date de signature</label>
+          <input type="date" id="date_sign">
+        </div>
+      </div>
+
+      <div class="nav-bar">
+        <button class="btn btn-secondary" onclick="goToStep(2)" data-i18n="btn_prev">← Retour</button>
+        <button class="btn btn-primary" onclick="goToStep(4)" data-i18n="btn_next">Suivant →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 4: SIGNATURES -->
+  <div class="section-card" id="step4">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <h2 data-i18n="step4_title">Signatures</h2>
+    </div>
+    <div class="section-body">
+      <p style="font-size:13px; color:var(--muted); margin-bottom:20px;" data-i18n="sig_instruction">Signez dans chacune des cases ci-dessous avec votre souris ou votre doigt.</p>
+
+      <div class="signatures-grid">
+        <div class="sig-block">
+          <div class="sig-title">Entrepreneur<br><small style="font-weight:400; letter-spacing:0; text-transform:none; font-size:11px;">Johnson Controls / Tyco</small></div>
+          <canvas id="sig-entrepreneur" width="260" height="100"></canvas>
+          <button class="sig-clear" onclick="clearSig('sig-entrepreneur')">Effacer</button>
+        </div>
+        <div class="sig-block">
+          <div class="sig-title">Maître d'œuvre</div>
+          <canvas id="sig-maitre" width="260" height="100"></canvas>
+          <button class="sig-clear" onclick="clearSig('sig-maitre')">Effacer</button>
+        </div>
+        <div class="sig-block">
+          <div class="sig-title">Mandataire / Client final</div>
+          <canvas id="sig-client" width="260" height="100"></canvas>
+          <button class="sig-clear" onclick="clearSig('sig-client')">Effacer</button>
+        </div>
+      </div>
+
+      <div class="nav-bar">
+        <button class="btn btn-secondary" onclick="goToStep(3)" data-i18n="btn_prev">← Retour</button>
+        <button class="btn btn-primary" onclick="goToStep(5)" data-i18n="btn_summary">Voir le récapitulatif →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 5: SUMMARY -->
+  <div class="section-card" id="step5">
+    <div class="section-header">
+      <div class="section-num">05</div>
+      <h2 data-i18n="step5_title">Récapitulatif &amp; Envoi</h2>
+    </div>
+    <div class="section-body">
+      <div id="summary-content"></div>
+
+      <div class="nav-bar" style="border-top:none; padding-top:0; margin-top:0;">
+        <button class="btn btn-secondary" onclick="goToStep(4)" data-i18n="btn_prev">← Retour</button>
+      </div>
+
+      <div class="divider"></div>
+
+      <p style="font-size:13px; color:var(--muted); margin-bottom:16px;" data-i18n="choose_action">Choisissez une action pour finaliser le protocole :</p>
+
+      <div class="final-actions">
+        <button class="btn btn-accent" onclick="generateAndDownloadPDF()">
+                    <span data-i18n="btn_download">⬇ Télécharger le PDF</span>
+        </button>
+        <button class="btn btn-primary" onclick="openEmailModal()">
+                    <span data-i18n="btn_email">✉ Envoyer par e-mail</span>
+        </button>
+        <button class="btn btn-secondary" onclick="resetForm()">
+                    <span data-i18n="btn_reset">↺ Nouveau protocole</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- HELP MODAL -->
+<div id="help-overlay" class="help-overlay" onclick="if(event.target===this)closeHelp()">
+  <div class="help-modal">
+    <div class="help-modal-header">
+      <div>
+        <h2 data-i18n="help_title">Aide & Guide d'utilisation</h2>
+        <p data-i18n="help_subtitle">Protocole de Réception SIA 118</p>
+      </div>
+      <button onclick="closeHelp()" style="background:none;border:none;color:rgba(255,255,255,0.6);font-size:24px;cursor:pointer;line-height:1;padding:0 0 0 16px;">×</button>
+    </div>
+    <div class="help-modal-body">
+      <div class="help-section">
+        <h3 data-i18n="help_how_title">📋 Comment remplir le formulaire</h3>
+        <p data-i18n="help_how_text">Le formulaire est divisé en 5 étapes. Remplissez chaque étape et appuyez sur "Suivant". Les champs marqués d'un * sont obligatoires.</p>
+      </div>
+      <div class="help-section">
+        <h3 data-i18n="help_steps_title">🔢 Les 5 étapes</h3>
+        <ol>
+          <li data-i18n="help_step1"></li>
+          <li data-i18n="help_step2"></li>
+          <li data-i18n="help_step3"></li>
+          <li data-i18n="help_step4"></li>
+          <li data-i18n="help_step5"></li>
+        </ol>
+      </div>
+      <div class="help-section">
+        <h3 data-i18n="help_pdf_title">📄 Générer le PDF</h3>
+        <p data-i18n="help_pdf_text"></p>
+      </div>
+      <div class="help-section">
+        <h3 data-i18n="help_email_title">✉ Envoyer par e-mail</h3>
+        <p data-i18n="help_email_text"></p>
+      </div>
+      <div class="help-section">
+        <h3 data-i18n="help_install_title">📲 Installer l'application</h3>
+        <div class="help-install-box">
+          <p data-i18n="help_install_android" style="margin-bottom:8px;"></p>
+          <p data-i18n="help_install_ios"></p>
+        </div>
+        <div>
+          <p data-i18n="help_install_link" style="font-size:12px;color:var(--muted);margin-top:10px;"></p>
+          <div class="help-link" id="help-app-link">https://stevezimmermann2012-png.github.io/protocole_reception/protocole_reception.html</div>
+        </div>
+      </div>
+      <div class="help-section">
+        <h3 data-i18n="help_offline_title">✈️ Mode hors ligne</h3>
+        <p data-i18n="help_offline_text"></p>
+      </div>
+    </div>
+    <div class="help-modal-footer">
+      <button class="btn btn-primary" onclick="closeHelp()" data-i18n="help_close">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<!-- EMAIL MODAL -->
+<div id="email-overlay" style="display:none; position:fixed; inset:0; background:rgba(10,18,40,0.55); z-index:500; align-items:center; justify-content:center;">
+  <div style="background:white; border-radius:2px; width:100%; max-width:480px; margin:20px; box-shadow:0 24px 60px rgba(0,0,0,0.3); overflow:hidden;">
+    <div style="background:var(--navy); padding:18px 24px; display:flex; align-items:center; justify-content:space-between;">
+      <div>
+        <div style="font-family:'Source Serif 4',serif; font-size:16px; color:white; font-weight:600;">Envoyer par e-mail</div>
+        <div style="font-size:11px; color:rgba(255,255,255,0.5); margin-top:2px;">Le PDF sera téléchargé, puis votre messagerie s'ouvrira</div>
+      </div>
+      <button onclick="closeEmailModal()" style="background:none;border:none;color:rgba(255,255,255,0.6);font-size:22px;cursor:pointer;line-height:1;padding:4px;">×</button>
+    </div>
+    <div style="padding:24px;">
+      <div style="background:#f0f7ff; border:1px solid #c0d8f0; border-left:4px solid #3b82f6; padding:14px 16px; border-radius:1px; margin-bottom:20px; font-size:12.5px; color:#1e3a5f; line-height:1.6;">
+        <strong style="display:block; margin-bottom:6px; font-size:13px;">ℹ️ Comment ça fonctionne :</strong>
+        <ol style="padding-left:18px; margin:0; display:flex; flex-direction:column; gap:4px;">
+          <li>Le PDF est <strong>téléchargé automatiquement</strong> sur votre ordinateur</li>
+          <li>Votre <strong>client e-mail s'ouvre</strong> avec le destinataire, l'objet et le message pré-remplis</li>
+          <li>Il vous suffit de <strong>joindre le PDF</strong> téléchargé et d'envoyer</li>
+        </ol>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:14px;">
+        <div class="field">
+          <label>Adresse e-mail du destinataire <span class="required">*</span></label>
+          <input type="email" id="email-to" placeholder="destinataire@exemple.ch" autocomplete="email" inputmode="email">
+        </div>
+        <div class="field">
+          <label>Copie (CC) — optionnel</label>
+          <input type="email" id="email-cc" placeholder="copie@exemple.ch" autocomplete="email" inputmode="email">
+        </div>
+        <div class="field">
+          <label>Message complémentaire — optionnel</label>
+          <textarea id="email-message" rows="3" placeholder="Remarques supplémentaires à inclure dans le corps du mail..."></textarea>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:12px; margin-top:22px; justify-content:flex-end;">
+        <button class="btn btn-secondary" onclick="closeEmailModal()">Annuler</button>
+        <button class="btn btn-primary" id="btn-send-email" onclick="sendByEmail()">
+          ⬇ Télécharger &amp; Ouvrir le mail
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+// ════════════════════════════════════════════════════════════
+// TRANSLATIONS
+// ════════════════════════════════════════════════════════════
+const TRANSLATIONS = {
+  fr: {
+    // Header
+    app_title: 'Protocole de Réception',
+    app_subtitle: 'Réception selon art. 157ff. Norme SIA 118',
+    // Steps
+    step1_label: 'Identification',
+    step2_label: 'Protocole de test',
+    step3_label: 'Instruction & Annexes',
+    step4_label: 'Signatures',
+    step5_label: 'Récapitulatif',
+    // Step 1
+    step1_title: 'Identification du projet',
+    projet: 'Projet',
+    maitre: "Maître d'œuvre",
+    chef_projet: 'Chef de projet',
+    remplace_par: 'Remplacé par (M. / Mme)',
+    entrepreneur: 'Entrepreneur',
+    contrat_date: 'Contrat de travail du',
+    no_offre: "N° d'offre",
+    cluster: 'Cluster',
+    vref: 'V/Réf.',
+    travaux: 'Concerne travaux',
+    no_projet: 'N° de projet',
+    materiel_tiers: 'Matériel non couvert par la garantie (livré par des tiers ou mis à disposition par le commettant)',
+    materiel_tiers_ph: 'Décrire le matériel exclu de la garantie...',
+    // Step 2
+    step2_title: 'Protocole de test',
+    essai_date: "Date de l'essai de réception",
+    essai_par: 'Exécuté par',
+    ms_centrale: 'M.S. Centrale',
+    ms_installation: 'M.S. Installation',
+    resultat: 'Résultat',
+    select_result: 'Sélectionner le résultat',
+    res_ok: 'Pas de défaut',
+    res_sec: 'Défauts secondaires',
+    res_maj: 'Défauts majeurs',
+    remarques: 'Remarques',
+    delai_remise: 'Délai pour remise en état',
+    etat_remise: 'État de la remise',
+    etat_remise_ok: "L'installation est remise (Art. 159, 160)",
+    etat_remise_nok: 'La remise est reportée à une date ultérieure (Art. 161)',
+    // Step 3
+    step3_title: 'Instruction & Annexes',
+    instruction_label: "Instruction donnée à (min. 2 personnes, nom + N° de tél.)",
+    person_nom: 'Nom',
+    person_tel: 'Téléphone',
+    add_person: '+ Ajouter une personne',
+    annexes: 'Annexes jointes',
+    ann_docs: 'Documents techniques révisés',
+    ann_mode: "Mode d'emploi, prescriptions",
+    ann_cahier: 'Cahier de contrôle',
+    ann_plan: 'Plan pompiers',
+    ann_autre: 'Autre(s)',
+    ann_precision: 'Précisions / autres annexes',
+    lieu: 'Lieu de signature',
+    date_sign: 'Date de signature',
+    // Step 4
+    step4_title: 'Signatures',
+    sig_instruction: 'Signez dans chacune des cases ci-dessous avec votre souris ou votre doigt.',
+    sig_entrepreneur: 'Entrepreneur
+Johnson Controls / Tyco',
+    sig_maitre: "Maître d'œuvre",
+    sig_client: 'Mandataire / Client final',
+    sig_clear: 'Effacer',
+    // Step 5
+    step5_title: 'Récapitulatif & Envoi',
+    choose_action: 'Choisissez une action pour finaliser le protocole :',
+    btn_download: '⬇ Télécharger le PDF',
+    btn_email: '✉ Envoyer par e-mail',
+    btn_reset: '↺ Nouveau protocole',
+    // Summary sections
+    sum_identification: 'Identification du projet',
+    sum_protocole: 'Protocole de test',
+    sum_instruction: 'Instruction & Annexes',
+    sum_personnes: 'Personnes instruites',
+    sum_annexes_label: 'Annexes',
+    sum_lieu_date: 'Lieu / Date',
+    // Nav
+    btn_next: 'Suivant →',
+    btn_prev: '← Retour',
+    btn_summary: 'Voir le récapitulatif →',
+    // Validation
+    fill_required: 'Champs obligatoires manquants',
+    // Email modal
+    email_title: 'Envoyer par e-mail',
+    email_subtitle: 'Le PDF sera téléchargé, puis votre messagerie s'ouvrira',
+    email_how: 'Comment ça fonctionne :',
+    email_step1: 'Le PDF est téléchargé automatiquement sur votre ordinateur',
+    email_step2: 'Votre client e-mail s'ouvre avec le destinataire, l'objet et le message pré-remplis',
+    email_step3: 'Il vous suffit de joindre le PDF téléchargé et d'envoyer',
+    email_to: 'Adresse e-mail du destinataire',
+    email_cc: 'Copie (CC) — optionnel',
+    email_msg: 'Message complémentaire — optionnel',
+    email_msg_ph: 'Remarques supplémentaires...',
+    btn_send: '⬇ Télécharger & Ouvrir le mail',
+    btn_cancel: 'Annuler',
+    // Help modal
+    help_title: 'Aide & Guide d'utilisation',
+    help_subtitle: 'Protocole de Réception SIA 118',
+    help_how_title: '📋 Comment remplir le formulaire',
+    help_how_text: 'Le formulaire est divisé en 5 étapes. Remplissez chaque étape et appuyez sur "Suivant". Les champs marqués d'un * sont obligatoires.',
+    help_steps_title: '🔢 Les 5 étapes',
+    help_step1: '<strong>Identification</strong> — Informations du projet, maître d'œuvre, entrepreneur',
+    help_step2: '<strong>Protocole de test</strong> — Date d'essai, résultat de la réception',
+    help_step3: '<strong>Instruction & Annexes</strong> — Personnes instruites, documents remis',
+    help_step4: '<strong>Signatures</strong> — Signez avec votre doigt ou la souris',
+    help_step5: '<strong>Récapitulatif</strong> — Vérifiez et téléchargez le PDF',
+    help_pdf_title: '📄 Générer le PDF',
+    help_pdf_text: 'À l'étape 5, appuyez sur "Télécharger le PDF". Le PDF reproduit exactement le modèle officiel SIA 118.',
+    help_email_title: '✉ Envoyer par e-mail',
+    help_email_text: 'Appuyez sur "Envoyer par e-mail", saisissez l'adresse du destinataire. Le PDF se télécharge et votre messagerie s'ouvre automatiquement.',
+    help_install_title: '📲 Installer l'application',
+    help_install_android: '<strong>Android (Chrome) :</strong> Ouvrez le lien dans Chrome → une bannière "Installer" apparaît → appuyez sur Installer.',
+    help_install_ios: '<strong>iPhone/iPad (Safari) :</strong> Ouvrez le lien dans Safari → bouton partage ⬆ → "Sur l'écran d'accueil" → Ajouter.',
+    help_install_link: 'Lien de l'application :',
+    help_offline_title: '✈️ Mode hors ligne',
+    help_offline_text: 'Une fois installée, l'application fonctionne sans connexion internet.',
+    help_close: 'Fermer',
+    // Install banner
+    install_title: 'Installer l'application',
+    install_subtitle: 'Accès rapide depuis votre écran d'accueil, fonctionne hors ligne',
+    install_btn: 'Installer',
+    // iOS tip
+    ios_tip_title: 'Installer sur iPhone / iPad',
+    ios_tip_text: 'Appuyez sur ⬆ puis "Sur l'écran d'accueil"',
+    ios_tip_ok: 'OK',
+    // Toast
+    toast_pdf: '✓ PDF téléchargé avec succès',
+    toast_reset: 'Formulaire réinitialisé',
+    reset_confirm: 'Réinitialiser le formulaire ? Toutes les données seront perdues.',
+    toast_installed: '✓ Application installée avec succès !',
+  },
+  de: {
+    app_title: 'Abnahmeprotokoll',
+    app_subtitle: 'Abnahme gemäss Art. 157ff. Norm SIA 118',
+    step1_label: 'Identifikation',
+    step2_label: 'Testprotokoll',
+    step3_label: 'Anweisung & Anhänge',
+    step4_label: 'Unterschriften',
+    step5_label: 'Zusammenfassung',
+    step1_title: 'Projektidentifikation',
+    projet: 'Projekt',
+    maitre: 'Bauherr',
+    chef_projet: 'Projektleiter',
+    remplace_par: 'Vertreten durch (Hr. / Fr.)',
+    entrepreneur: 'Unternehmer',
+    contrat_date: 'Werkvertrag vom',
+    no_offre: 'Angebots-Nr.',
+    cluster: 'Cluster',
+    vref: 'Ihre Ref.',
+    travaux: 'Betreffend Arbeiten',
+    no_projet: 'Projekt-Nr.',
+    materiel_tiers: 'Material nicht durch Garantie gedeckt (von Dritten geliefert oder vom Auftraggeber zur Verfügung gestellt)',
+    materiel_tiers_ph: 'Material ausserhalb der Garantie beschreiben...',
+    step2_title: 'Testprotokoll',
+    essai_date: 'Datum der Abnahmeprüfung',
+    essai_par: 'Durchgeführt von',
+    ms_centrale: 'IBS Zentrale',
+    ms_installation: 'IBS Anlage',
+    resultat: 'Ergebnis',
+    select_result: 'Ergebnis auswählen',
+    res_ok: 'Kein Mangel',
+    res_sec: 'Nebenmängel',
+    res_maj: 'Hauptmängel',
+    remarques: 'Bemerkungen',
+    delai_remise: 'Frist zur Mängelbehebung',
+    etat_remise: 'Übergabestatus',
+    etat_remise_ok: 'Die Anlage wird übergeben (Art. 159, 160)',
+    etat_remise_nok: 'Die Übergabe wird auf einen späteren Zeitpunkt verschoben (Art. 161)',
+    step3_title: 'Anweisung & Anhänge',
+    instruction_label: 'Einweisung erteilt an (mind. 2 Personen, Name + Tel.-Nr.)',
+    person_nom: 'Name',
+    person_tel: 'Telefon',
+    add_person: '+ Person hinzufügen',
+    annexes: 'Beigefügte Anhänge',
+    ann_docs: 'Überarbeitete technische Unterlagen',
+    ann_mode: 'Bedienungsanleitung, Vorschriften',
+    ann_cahier: 'Kontrollheft',
+    ann_plan: 'Feuerwehrplan',
+    ann_autre: 'Weitere(s)',
+    ann_precision: 'Präzisierungen / weitere Anhänge',
+    lieu: 'Unterschriftsort',
+    date_sign: 'Unterschriftsdatum',
+    step4_title: 'Unterschriften',
+    sig_instruction: 'Unterschreiben Sie in den Feldern mit Maus oder Finger.',
+    sig_entrepreneur: 'Unternehmer
+Johnson Controls / Tyco',
+    sig_maitre: 'Bauherr',
+    sig_client: 'Auftraggeber / Endkunde',
+    sig_clear: 'Löschen',
+    step5_title: 'Zusammenfassung & Versand',
+    choose_action: 'Wählen Sie eine Aktion zum Abschliessen des Protokolls:',
+    btn_download: '⬇ PDF herunterladen',
+    btn_email: '✉ Per E-Mail senden',
+    btn_reset: '↺ Neues Protokoll',
+    sum_identification: 'Projektidentifikation',
+    sum_protocole: 'Testprotokoll',
+    sum_instruction: 'Anweisung & Anhänge',
+    sum_personnes: 'Eingewiesene Personen',
+    sum_annexes_label: 'Anhänge',
+    sum_lieu_date: 'Ort / Datum',
+    btn_next: 'Weiter →',
+    btn_prev: '← Zurück',
+    btn_summary: 'Zusammenfassung →',
+    fill_required: 'Pflichtfelder fehlen',
+    email_title: 'Per E-Mail senden',
+    email_subtitle: 'PDF wird heruntergeladen, dann öffnet sich Ihr E-Mail-Programm',
+    email_how: 'So funktioniert es:',
+    email_step1: 'PDF wird automatisch auf Ihrem Computer heruntergeladen',
+    email_step2: 'Ihr E-Mail-Programm öffnet sich mit vorausgefüllten Feldern',
+    email_step3: 'Fügen Sie das heruntergeladene PDF als Anhang hinzu und senden Sie',
+    email_to: 'E-Mail-Adresse des Empfängers',
+    email_cc: 'Kopie (CC) — optional',
+    email_msg: 'Zusätzliche Nachricht — optional',
+    email_msg_ph: 'Weitere Bemerkungen...',
+    btn_send: '⬇ Herunterladen & E-Mail öffnen',
+    btn_cancel: 'Abbrechen',
+    help_title: 'Hilfe & Benutzerhandbuch',
+    help_subtitle: 'Abnahmeprotokoll SIA 118',
+    help_how_title: '📋 Formular ausfüllen',
+    help_how_text: 'Das Formular ist in 5 Schritte unterteilt. Füllen Sie jeden Schritt aus und drücken Sie "Weiter". Mit * markierte Felder sind Pflichtfelder.',
+    help_steps_title: '🔢 Die 5 Schritte',
+    help_step1: '<strong>Identifikation</strong> — Projektinfos, Bauherr, Unternehmer',
+    help_step2: '<strong>Testprotokoll</strong> — Prüfdatum, Abnahmeergebnis',
+    help_step3: '<strong>Anweisung & Anhänge</strong> — Eingewiesene Personen, übergebene Dokumente',
+    help_step4: '<strong>Unterschriften</strong> — Unterschreiben mit Finger oder Maus',
+    help_step5: '<strong>Zusammenfassung</strong> — Überprüfen und PDF herunterladen',
+    help_pdf_title: '📄 PDF erstellen',
+    help_pdf_text: 'In Schritt 5 auf "PDF herunterladen" drücken. Das PDF entspricht genau dem offiziellen SIA 118 Muster.',
+    help_email_title: '✉ Per E-Mail senden',
+    help_email_text: 'Auf "Per E-Mail senden" drücken, E-Mail-Adresse eingeben. PDF wird heruntergeladen und E-Mail-Programm öffnet sich automatisch.',
+    help_install_title: '📲 App installieren',
+    help_install_android: '<strong>Android (Chrome):</strong> Link in Chrome öffnen → Banner "Installieren" → Installieren drücken.',
+    help_install_ios: '<strong>iPhone/iPad (Safari):</strong> Link in Safari öffnen → Teilen-Symbol ⬆ → "Zum Home-Bildschirm" → Hinzufügen.',
+    help_install_link: 'App-Link:',
+    help_offline_title: '✈️ Offline-Modus',
+    help_offline_text: 'Nach der Installation funktioniert die App ohne Internetverbindung.',
+    help_close: 'Schliessen',
+    install_title: 'App installieren',
+    install_subtitle: 'Schnellzugriff vom Startbildschirm, funktioniert offline',
+    install_btn: 'Installieren',
+    ios_tip_title: 'Auf iPhone / iPad installieren',
+    ios_tip_text: 'Auf ⬆ tippen, dann "Zum Home-Bildschirm"',
+    ios_tip_ok: 'OK',
+    toast_pdf: '✓ PDF erfolgreich heruntergeladen',
+    toast_reset: 'Formular zurückgesetzt',
+    reset_confirm: 'Formular zurücksetzen? Alle Daten gehen verloren.',
+    toast_installed: '✓ App erfolgreich installiert!',
+  },
+  en: {
+    app_title: 'Reception Protocol',
+    app_subtitle: 'Reception according to Art. 157ff. SIA 118 Standard',
+    step1_label: 'Identification',
+    step2_label: 'Test Protocol',
+    step3_label: 'Instruction & Annexes',
+    step4_label: 'Signatures',
+    step5_label: 'Summary',
+    step1_title: 'Project Identification',
+    projet: 'Project',
+    maitre: 'Client / Owner',
+    chef_projet: 'Project Manager',
+    remplace_par: 'Replaced by (Mr. / Ms.)',
+    entrepreneur: 'Contractor',
+    contrat_date: 'Work contract dated',
+    no_offre: 'Offer No.',
+    cluster: 'Cluster',
+    vref: 'Your Ref.',
+    travaux: 'Works concerned',
+    no_projet: 'Project No.',
+    materiel_tiers: 'Equipment not covered by warranty (supplied by third parties or made available by client)',
+    materiel_tiers_ph: 'Describe equipment excluded from warranty...',
+    step2_title: 'Test Protocol',
+    essai_date: 'Reception test date',
+    essai_par: 'Carried out by',
+    ms_centrale: 'Panel commissioning',
+    ms_installation: 'System commissioning',
+    resultat: 'Result',
+    select_result: 'Select result',
+    res_ok: 'No defect',
+    res_sec: 'Minor defects',
+    res_maj: 'Major defects',
+    remarques: 'Remarks',
+    delai_remise: 'Deadline for remediation',
+    etat_remise: 'Handover status',
+    etat_remise_ok: 'Installation is handed over (Art. 159, 160)',
+    etat_remise_nok: 'Handover is postponed to a later date (Art. 161)',
+    step3_title: 'Instruction & Annexes',
+    instruction_label: 'Instruction given to (min. 2 persons, name + phone no.)',
+    person_nom: 'Name',
+    person_tel: 'Phone',
+    add_person: '+ Add person',
+    annexes: 'Attached annexes',
+    ann_docs: 'Revised technical documents',
+    ann_mode: 'User manual, prescriptions',
+    ann_cahier: 'Control logbook',
+    ann_plan: 'Fire brigade plan',
+    ann_autre: 'Other(s)',
+    ann_precision: 'Details / other annexes',
+    lieu: 'Signature location',
+    date_sign: 'Signature date',
+    step4_title: 'Signatures',
+    sig_instruction: 'Sign in each field below using your mouse or finger.',
+    sig_entrepreneur: 'Contractor
+Johnson Controls / Tyco',
+    sig_maitre: 'Client / Owner',
+    sig_client: 'Mandatary / End Client',
+    sig_clear: 'Clear',
+    step5_title: 'Summary & Send',
+    choose_action: 'Choose an action to finalise the protocol:',
+    btn_download: '⬇ Download PDF',
+    btn_email: '✉ Send by email',
+    btn_reset: '↺ New protocol',
+    sum_identification: 'Project Identification',
+    sum_protocole: 'Test Protocol',
+    sum_instruction: 'Instruction & Annexes',
+    sum_personnes: 'Instructed persons',
+    sum_annexes_label: 'Annexes',
+    sum_lieu_date: 'Location / Date',
+    btn_next: 'Next →',
+    btn_prev: '← Back',
+    btn_summary: 'View summary →',
+    fill_required: 'Required fields missing',
+    email_title: 'Send by email',
+    email_subtitle: 'PDF will be downloaded, then your email client will open',
+    email_how: 'How it works:',
+    email_step1: 'PDF is automatically downloaded to your computer',
+    email_step2: 'Your email client opens with pre-filled recipient, subject and body',
+    email_step3: 'Simply attach the downloaded PDF and send',
+    email_to: 'Recipient email address',
+    email_cc: 'Copy (CC) — optional',
+    email_msg: 'Additional message — optional',
+    email_msg_ph: 'Additional remarks...',
+    btn_send: '⬇ Download & Open email',
+    btn_cancel: 'Cancel',
+    help_title: 'Help & User Guide',
+    help_subtitle: 'Reception Protocol SIA 118',
+    help_how_title: '📋 How to fill in the form',
+    help_how_text: 'The form is divided into 5 steps. Fill in each step and press "Next". Fields marked with * are required.',
+    help_steps_title: '🔢 The 5 steps',
+    help_step1: '<strong>Identification</strong> — Project info, client, contractor',
+    help_step2: '<strong>Test Protocol</strong> — Test date, reception result',
+    help_step3: '<strong>Instruction & Annexes</strong> — Instructed persons, documents handed over',
+    help_step4: '<strong>Signatures</strong> — Sign with finger or mouse',
+    help_step5: '<strong>Summary</strong> — Review and download PDF',
+    help_pdf_title: '📄 Generate PDF',
+    help_pdf_text: 'In step 5, press "Download PDF". The PDF exactly reproduces the official SIA 118 model.',
+    help_email_title: '✉ Send by email',
+    help_email_text: 'Press "Send by email", enter recipient address. PDF downloads and your email client opens automatically.',
+    help_install_title: '📲 Install the app',
+    help_install_android: '<strong>Android (Chrome):</strong> Open link in Chrome → "Install" banner appears → Press Install.',
+    help_install_ios: '<strong>iPhone/iPad (Safari):</strong> Open link in Safari → Share icon ⬆ → "Add to Home Screen" → Add.',
+    help_install_link: 'App link:',
+    help_offline_title: '✈️ Offline mode',
+    help_offline_text: 'Once installed, the app works without an internet connection.',
+    help_close: 'Close',
+    install_title: 'Install app',
+    install_subtitle: 'Quick access from your home screen, works offline',
+    install_btn: 'Install',
+    ios_tip_title: 'Install on iPhone / iPad',
+    ios_tip_text: 'Tap ⬆ then "Add to Home Screen"',
+    ios_tip_ok: 'OK',
+    toast_pdf: '✓ PDF downloaded successfully',
+    toast_reset: 'Form reset',
+    reset_confirm: 'Reset the form? All data will be lost.',
+    toast_installed: '✓ App installed successfully!',
+  }
+};
+
+let currentLang = 'fr';
+function t(key) { return TRANSLATIONS[currentLang][key] || TRANSLATIONS['fr'][key] || key; }
+
+function applyTranslations() {
+  // Update all data-i18n elements
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    const attr = el.getAttribute('data-i18n-attr');
+    if (attr) {
+      el.setAttribute(attr, t(key));
+    } else {
+      el.innerHTML = t(key);
+    }
+  });
+  // Update html lang
+  document.documentElement.lang = currentLang;
+}
+
+function changeLang(lang) {
+  currentLang = lang;
+  applyTranslations();
+  // Update lang selector highlight
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('lang-active', b.dataset.lang === lang);
+  });
+}
+
+let currentStep = 1;
+
+// Clear validation errors on input
+document.addEventListener('input', e => {
+  if (e.target.classList.contains('field-error')) {
+    e.target.classList.remove('field-error');
+  }
+});
+document.addEventListener('change', e => {
+  if (e.target.classList.contains('field-error')) {
+    e.target.classList.remove('field-error');
+  }
+  // Clear result card errors when result selected
+  document.querySelectorAll('.card-error').forEach(c => c.classList.remove('card-error'));
+});
+const totalSteps = 5;
+let selectedResult = null;
+
+// ── Validation rules per step ────────────────────────────────
+const STEP_REQUIRED = {
+  1: [
+    {id:'projet',        labelKey:'projet'},
+    {id:'maitre',        labelKey:'maitre'},
+    {id:'chef_projet',   labelKey:'chef_projet'},
+    {id:'entrepreneur',  labelKey:'entrepreneur'},
+    {id:'contrat_date',  labelKey:'contrat_date'},
+    {id:'no_offre',      labelKey:'no_offre'},
+    {id:'cluster',       labelKey:'cluster'},
+    {id:'travaux',       labelKey:'travaux'},
+    {id:'no_projet',     labelKey:'no_projet'},
+  ],
+  2: [
+    {id:'essai_date', labelKey:'essai_date'},
+  ],
+  2_radio: [
+    {name:'resultat', labelKey:'resultat'},
+  ],
+};
+
+function validateStep(step) {
+  let errors = [];
+  // Clear previous highlights
+  document.querySelectorAll('.field-error').forEach(el => {
+    el.classList.remove('field-error');
+  });
+
+  if (step === 1) {
+    STEP_REQUIRED[1].forEach(rule => {
+      const el = document.getElementById(rule.id);
+      if (!el || !el.value.trim()) {
+        if (el) el.classList.add('field-error');
+        errors.push(el?.previousElementSibling?.textContent?.replace('*','').trim() || rule.id);
+      }
+    });
+  }
+  if (step === 2) {
+    const dateEl = document.getElementById('essai_date');
+    if (!dateEl || !dateEl.value) {
+      if (dateEl) dateEl.classList.add('field-error');
+      errors.push(t('essai_date'));
+    }
+    if (!selectedResult) {
+      document.querySelectorAll('.result-card').forEach(c => c.classList.add('card-error'));
+      errors.push(t('resultat'));
+    }
+  }
+  return errors;
+}
+
+function goToStep(step) {
+  // Only validate when moving forward
+  if (step > currentStep) {
+    const errors = validateStep(currentStep);
+    if (errors.length > 0) {
+      showToast('⚠ ' + t('fill_required') + ' : ' + errors.slice(0,2).join(', ') + (errors.length > 2 ? '…' : ''));
+      // Scroll to first error
+      const firstErr = document.querySelector('.field-error, .card-error');
+      if (firstErr) firstErr.scrollIntoView({behavior:'smooth', block:'center'});
+      return;
+    }
+  }
+
+  document.getElementById('step' + currentStep).classList.remove('active');
+  document.getElementById('si' + currentStep).classList.remove('active');
+
+  currentStep = step;
+  document.getElementById('step' + currentStep).classList.add('active');
+  document.getElementById('si' + currentStep).classList.remove('done');
+  document.getElementById('si' + currentStep).classList.add('active');
+
+  if (step === 5) buildSummary();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  for (let i = 1; i <= totalSteps; i++) {
+    const si = document.getElementById('si' + i);
+    si.classList.remove('active', 'done');
+    if (i === step) si.classList.add('active');
+    else if (i < step) si.classList.add('done');
+  }
+}
+
+function selectResult(type) {
+  selectedResult = type;
+  document.querySelectorAll('.result-card').forEach(c => {
+    c.classList.remove('selected-ok', 'selected-sec', 'selected-maj');
+  });
+  const card = document.getElementById('rc-' + type);
+  card.classList.add('selected-' + type);
+  card.querySelector('input').checked = true;
+}
+
+// PERSONS
+function addPerson() {
+  const block = document.getElementById('persons-block');
+  const row = document.createElement('div');
+  row.className = 'person-row';
+  row.innerHTML = `
+    <div class="field"><label>Nom</label><input type="text" placeholder="Prénom Nom" class="person-name"></div>
+    <div class="field"><label>Téléphone</label><input type="tel" placeholder="+41 xx xxx xx xx" class="person-tel"></div>
+    <button class="btn-remove" onclick="removePerson(this)" title="Supprimer">×</button>
+  `;
+  block.appendChild(row);
+}
+function removePerson(btn) {
+  const rows = document.querySelectorAll('.person-row');
+  if (rows.length <= 1) { showToast('Minimum une personne requise'); return; }
+  btn.parentElement.remove();
+}
+
+// SIGNATURES
+const sigStates = {};
+function initSignature(canvasId) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let drawing = false;
+  let lastX = 0, lastY = 0;
+
+  function getPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    if (e.touches) {
+      return { x: (e.touches[0].clientX - rect.left) * scaleX, y: (e.touches[0].clientY - rect.top) * scaleY };
+    }
+    return { x: (e.clientX - rect.left) * scaleX, y: (e.clientY - rect.top) * scaleY };
+  }
+
+  canvas.addEventListener('mousedown', e => { drawing = true; const p = getPos(e); lastX = p.x; lastY = p.y; });
+  canvas.addEventListener('mousemove', e => {
+    if (!drawing) return;
+    const p = getPos(e);
+    ctx.beginPath(); ctx.moveTo(lastX, lastY); ctx.lineTo(p.x, p.y);
+    ctx.strokeStyle = '#1a2744'; ctx.lineWidth = 2; ctx.lineCap = 'round';
+    ctx.stroke();
+    lastX = p.x; lastY = p.y;
+    sigStates[canvasId] = true;
+  });
+  canvas.addEventListener('mouseup', () => drawing = false);
+  canvas.addEventListener('mouseleave', () => drawing = false);
+  canvas.addEventListener('touchstart', e => { e.preventDefault(); drawing = true; const p = getPos(e); lastX = p.x; lastY = p.y; }, { passive: false });
+  canvas.addEventListener('touchmove', e => {
+    e.preventDefault();
+    if (!drawing) return;
+    const p = getPos(e);
+    ctx.beginPath(); ctx.moveTo(lastX, lastY); ctx.lineTo(p.x, p.y);
+    ctx.strokeStyle = '#1a2744'; ctx.lineWidth = 2; ctx.lineCap = 'round';
+    ctx.stroke();
+    lastX = p.x; lastY = p.y;
+    sigStates[canvasId] = true;
+  }, { passive: false });
+  canvas.addEventListener('touchend', () => drawing = false);
+}
+
+function clearSig(canvasId) {
+  const canvas = document.getElementById(canvasId);
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  sigStates[canvasId] = false;
+}
+
+initSignature('sig-entrepreneur');
+initSignature('sig-maitre');
+initSignature('sig-client');
+
+// SUMMARY
+function buildSummary() {
+  const container = document.getElementById('summary-content');
+  const resultLabels = {
+    ok: '<span class="result-badge badge-ok">✓ Pas de défaut (Art. 159)</span>',
+    sec: '<span class="result-badge badge-sec">⚠ Défauts secondaires (Art. 160)</span>',
+    maj: '<span class="result-badge badge-maj">✗ Défauts majeurs (Art. 161)</span>'
+  };
+
+  const persons = Array.from(document.querySelectorAll('.person-row')).map(r => {
+    const name = r.querySelector('.person-name').value;
+    const tel = r.querySelector('.person-tel').value;
+    return name ? `${name}${tel ? ' – ' + tel : ''}` : null;
+  }).filter(Boolean);
+
+  const annexes = [];
+  if (document.getElementById('ann-docs').checked) annexes.push('Documents techniques révisés');
+  if (document.getElementById('ann-mode').checked) annexes.push('Mode d\'emploi, prescriptions');
+  if (document.getElementById('ann-cahier').checked) annexes.push('Cahier de contrôle');
+  if (document.getElementById('ann-plan').checked) annexes.push('Plan pompiers');
+  const prec = document.getElementById('ann-precision').value;
+  if (prec) annexes.push(prec);
+
+  const etatRemise = document.querySelector('input[name="etat_remise"]:checked');
+
+  container.innerHTML = `
+    <div class="summary-section">
+      <h3>Identification du projet</h3>
+      <div class="summary-row"><span class="s-label">Projet</span><span class="s-val">${v('projet')}</span></div>
+      <div class="summary-row"><span class="s-label">Maître d'œuvre</span><span class="s-val">${v('maitre')}</span></div>
+      <div class="summary-row"><span class="s-label">Chef de projet</span><span class="s-val">${v('chef_projet')}</span></div>
+      <div class="summary-row"><span class="s-label">Remplacé par</span><span class="s-val">${v('remplace_par') || '—'}</span></div>
+      <div class="summary-row"><span class="s-label">Entrepreneur</span><span class="s-val">${v('entrepreneur')}</span></div>
+      <div class="summary-row"><span class="s-label">N° d'offre / Cluster</span><span class="s-val">${v('no_offre')} / ${v('cluster')}</span></div>
+      <div class="summary-row"><span class="s-label">Contrat du</span><span class="s-val">${formatDate(v('contrat_date'))}</span></div>
+      <div class="summary-row"><span class="s-label">Travaux concernés</span><span class="s-val">${v('travaux')}</span></div>
+    </div>
+
+    <div class="summary-section">
+      <h3>Protocole de test</h3>
+      <div class="summary-row"><span class="s-label">Essai effectué le</span><span class="s-val">${formatDate(v('essai_date'))}</span></div>
+      <div class="summary-row"><span class="s-label">Par</span><span class="s-val">${v('essai_par') || '—'}</span></div>
+      <div class="summary-row"><span class="s-label">M.S. Centrale</span><span class="s-val">${getRadio('ms_centrale')}</span></div>
+      <div class="summary-row"><span class="s-label">M.S. Installation</span><span class="s-val">${getRadio('ms_installation')}</span></div>
+      <div class="summary-row"><span class="s-label">Résultat</span><span class="s-val">${selectedResult ? resultLabels[selectedResult] : '—'}</span></div>
+      <div class="summary-row"><span class="s-label">Remarques</span><span class="s-val">${v('remarques') || '—'}</span></div>
+      <div class="summary-row"><span class="s-label">Délai remise en état</span><span class="s-val">${v('delai_remise') || '—'}</span></div>
+      <div class="summary-row"><span class="s-label">État remise</span><span class="s-val">${etatRemise ? (etatRemise.value === 'remise' ? 'Remise effectuée (Art. 159, 160)' : 'Remise reportée (Art. 161)') : '—'}</span></div>
+    </div>
+
+    <div class="summary-section">
+      <h3>Instruction &amp; Annexes</h3>
+      <div class="summary-row"><span class="s-label">Personnes instruites</span><span class="s-val">${persons.length ? persons.join('<br>') : '—'}</span></div>
+      <div class="summary-row"><span class="s-label">Annexes</span><span class="s-val">${annexes.length ? annexes.join(', ') : '—'}</span></div>
+      <div class="summary-row"><span class="s-label">Lieu / Date</span><span class="s-val">${v('lieu') || '—'} / ${formatDate(v('date_sign'))}</span></div>
+    </div>
+  `;
+}
+
+function v(id) { return document.getElementById(id)?.value || ''; }
+function getRadio(name) {
+  const el = document.querySelector(`input[name="${name}"]:checked`);
+  return el ? el.value : '—';
+}
+function formatDate(d) {
+  if (!d) return '—';
+  const parts = d.split('-');
+  if (parts.length !== 3) return d;
+  return `${parts[2]}.${parts[1]}.${parts[0]}`;
+}
+
+// TOAST
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+// PDF GENERATION
+function generatePDFDoc() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  const PW = 210, PH = 297;
+  const ML = 12, MR = 12, MT = 8;
+  const CW = PW - ML - MR;
+
+  // ── Helpers ────────────────────────────────────────────────
+  function label(txt, x, y, sz=9, bold=false) {
+    doc.setFont('helvetica', bold ? 'bold' : 'normal');
+    doc.setFontSize(sz);
+    doc.setTextColor(0,0,0);
+    doc.text(txt, x, y);
+  }
+
+  function fieldVal(txt, x, y, w, sz=9) {
+    // yellow background like Excel
+    doc.setFillColor(255,255,204);
+    doc.rect(x, y-4.5, w, 5.5, 'F');
+    // bottom hair line
+    doc.setDrawColor(180,180,180);
+    doc.setLineWidth(0.2);
+    doc.line(x, y+1, x+w, y+1);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(sz);
+    doc.setTextColor(0,0,0);
+    if (txt) {
+      const lines = doc.splitTextToSize(txt, w-2);
+      doc.text(lines[0], x+1, y);
+    }
+  }
+
+  function checkboxRow(checked, txt, x, y, sz=9) {
+    // draw checkbox square
+    doc.setDrawColor(60,60,60);
+    doc.setLineWidth(0.4);
+    doc.rect(x, y-3.5, 3.5, 3.5);
+    if (checked) {
+      doc.setFont('zapfdingbats','normal');
+      doc.setFontSize(8);
+      doc.setTextColor(0,0,0);
+      doc.text('4', x+0.3, y-0.3); // checkmark glyph
+    }
+    doc.setFont('helvetica','normal');
+    doc.setFontSize(sz);
+    doc.setTextColor(0,0,0);
+    doc.text(txt, x+5, y);
+  }
+
+  function sectionTitle(txt, x, y, sz=11) {
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(sz);
+    doc.setTextColor(0,0,0);
+    doc.text(txt, x, y);
+  }
+
+  function hline(x1, y, x2, color=[180,180,180], w=0.2) {
+    doc.setDrawColor(...color);
+    doc.setLineWidth(w);
+    doc.line(x1, y, x2, y);
+  }
+
+  function borderBox(x, y, w, h, color=[0,0,0], lw=0.5) {
+    doc.setDrawColor(...color);
+    doc.setLineWidth(lw);
+    doc.rect(x, y, w, h, 'S');
+  }
+
+  // ── Get form values ────────────────────────────────────────
+  const f = id => document.getElementById(id)?.value || '';
+  const fd = id => { const v = document.getElementById(id)?.value; if(!v) return ''; const p=v.split('-'); return p.length===3?`${p[2]}.${p[1]}.${p[0]}`:v; };
+  const radio = name => { const el=document.querySelector(`input[name="${name}"]:checked`); return el?el.value:''; };
+  const cb = id => document.getElementById(id)?.checked;
+
+  const persons = Array.from(document.querySelectorAll('.person-row')).map(r=>({
+    name: r.querySelector('.person-name').value,
+    tel: r.querySelector('.person-tel').value
+  })).filter(p=>p.name||p.tel);
+
+  const resultLabels = {ok:'Pas de défaut', sec:'Défauts secondaires', maj:'Défauts majeurs'};
+  const artLabels = {ok:'(Art. 159)', sec:'(Art. 160)', maj:'(Art. 161)'};
+
+  // ═══════════════════════════════════════════════════════════
+  // PAGE LAYOUT — mirroring the Excel sheet exactly
+  // ═══════════════════════════════════════════════════════════
+  let y = MT;
+
+  // ── HEADER BOX (title block with medium border) ────────────
+  // Logo on right side
+  const logoData = 'data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCACWAe0DASIAAhEBAxEB/8QAHQABAAMAAwEBAQAAAAAAAAAAAAYHCAEEBQIDCf/EAFoQAAECBQEDBQsHBwYMBAcAAAECAwAEBQYREgchMQgTQVaRFBcYIlFhcYGV0tMVMjdGdaGzFiNSgoSxxDZCcpKUsjM4Q2JzdIaiwcLD0SUmJzU0U4OT4fDx/8QAGwEBAAMBAQEBAAAAAAAAAAAAAAMEBQIBBgf/xAA1EQABBAECBAQDBwQDAQAAAAABAAIDBBEhMQUSQVETYXGRFIGhBiIyQsHR8BYkseEjM/FS/9oADAMBAAIRAxEAPwC7OT9ZFlz+xCzJyetC35qZeo0st156msrWtRQMlSinJPnMTnve2D1Htn2Ux7seLycPoEsf7ElvwxFgQRRnve2D1Htn2Ux7sO97YPUe2fZTHuxJoQRRnve2D1Htn2Ux7sO97YPUe2fZTHuxJoQRRnve2D1Htn2Ux7sO97YPUe2fZTHuxJoQRRnve2D1Htn2Ux7sO97YPUe2fZTHuxJoQRRnve2D1Htn2Ux7sO97YPUe2fZTHuxJoQRRnve2D1Htn2Ux7sO97YPUe2fZTHuxJoQRRnve2D1Htn2Ux7sO97YPUe2fZTHuxJoQRRnve2D1Htn2Ux7sO97YPUe2fZTHuxJoQRRnve2D1Htn2Ux7sO97YPUe2fZTHuxJoQRRnve2D1Htn2Ux7sO97YPUe2fZTHuxJoQRRnve2D1Htn2Ux7sO97YPUe2fZTHuxJoQRRnve2D1Htn2Ux7sO97YPUe2fZTHuxJoQRRnve2D1Htn2Ux7sO97YPUe2fZTHuxJoQRRnve2D1Htn2Ux7sO97YPUe2fZTHuxJoQRRnve2D1Htn2Ux7sO97YPUe2fZTHuxJoQRRnve2D1Htn2Ux7sO97YPUe2fZTHuxJoQRRnve2D1Htn2Ux7sO97YPUe2fZTHuxJoQRRnve2D1Htn2Ux7sO97YPUe2fZTHuxJoQRRnve2D1Htn2Ux7sO97YPUe2fZTHuxJoQRRnve2D1Htn2Ux7sO97YPUe2fZTHuxJoQRRnve2D1Htn2Ux7sO97YPUe2fZTHuxJoQRRnve2D1Htn2Ux7sO97YPUe2fZTHuxJoQRRnve2D1Htn2Ux7sO97YPUe2fZTHuxJoQRRnve2D1Htn2Ux7sO97YPUe2fZTHuxJoQRRnve2D1Htn2Ux7sO97YPUe2fZTHuxJoQRRnve2D1Htn2Ux7sO97YPUe2fZTHuxJjHyFpKtIUM44Zgijfe9sHqPbPspj3Yd72weo9s+ymPdj0DcFKF0i2TMkVQyndgZKFYLWrTkKxjOejOemPmrXLRqVXaXRJ+c5ieqpcEkgtqIdKACoagNIO8cSM53R1yO2wuPEb38l0e97YPUe2fZTHuw73tg9R7Z9lMe7EmHCEcrtRnve2D1Htn2Ux7sO97YPUe2fZTHuxJoQRRnve2D1Htn2Ux7sZz5alp2rS/yS+TLaosjzvdnOdzyLTevHMYzpSM4ye0xrKMzcuf6nft38PBFbPJw+gSx/sSW/DEWBFf8nD6BLH+xJb8MRYEESEI6tQqEjTpVU3UJ2Xk5dPznX3QhA9JJxAAk4C8JAGSu1CIrSNoNpVi4k0CkVdFQnsKUpMuhSkJSkZKucxpI4DcTvIiVCOnscw4cMLlkjJBlhykIQjldpCEIIkIQgiQhCCJCEIIkIQgiQhCCJCEIIkIQgiQhCCJCEIIkIQgiQhCCJCEIIkIQgiQhCCJCEIIkIQgiQhCCJCEIIkIQgiQhCCJAx+U0+3LMLfeWENNpKlqPAAcTHh0K4Uz9HqFZmEGXkmFrLZVu/NoSCVH7/Rj1noMcRkKJ8zGPDCdTr8gluXI3Wq9XKY0yEppbqGuc155wnVq3Y3YKSOnh6og9jVTndvt4SrasNPS6CoZ+cpnm2/u1KhyfnXZx+46i9jnJl9pa8cNRLij/AHohuyaeRNbe6jNyy9TM49OKSr9JKlFQ/cI1G1g0zN7NH6FYvxjpWwPP5nH21C9baTU/krlO2jMhGrXKMyxGf/nOPt59WvPqj8eVu/MU1dnV2UKUzNPnXXGVKGQFjmlpyPSgRDOUlUlt7YkvMKKHZCXl9Kgd4UPzgP8AvCJ9ywkJc2d0mYGDiqoSDx3KZdP/ACiLUUYbLWceox/PdceKXNst7HP89lMZ7aTIPUyUeoTK5t2bZbdRrBCUBaQoAjiVbxkD0ZyIk9qitfJiXK48hcy4orCEoCebB4JOOP8A+8YqjksyUrUrObrEwtb0xIvrk0pXwQQAoEfqrSPV2WLdF3ylJK5WVCZmcGRpB8Rs/wCcfLnoH3RmW42RPMTBsd1NWnka34q2/A6Abf7KlOd8cxGLLRXJkuVWrza9Ewkc1LaQEoTxBx0cf++Yk4imVrQS+MwPwRnukZm5c/1O/bv4eNMxmblz/U79u/h48Uytnk4fQJY/2JLfhiJdWq/Q6IGjWaxIU4PEhozUwlrXjGcaiM4yO2IjycfoEsb7ElvwxEY2+bOrtvuvU92kuU5MhJyxSkTDykr5xSsr3BJ3YSjsMWKsUcsobI7lHdVrcskURdE3mPZTSv7SrNp1EnZ6XuWjzjzDC3G5dmdbUt1QBIQADnJOBGMqrU6jVpxc5VJ+ZnZlfznX3CtR82/o80SfaHs5rtiy0o9W5mnKM2tSWW5d5S1nSMqOCkDAyOnO8eqGx9lwulBA0vidzZ6r4ril6xO4Mlby46K5uSzPW/R63WatW6zT6csS7cuwJqYQ2VhSipRGojONCe2NEU+8bTqM41JSFzUebmnThtlmdbWtZxnckHJ3b4zBQtht61iiyVVll0pDE4wh9oOTCgrSoBQyAk78HyxZGxDZDXLRvNVduBVPcSzLLRLBh1S1JcUQNW9IGNOofrRkcUjqSufN4uXdlr8KkuQtZD4WG91cNbr9EofNGs1eQpweyGjNTCWteMZxqIzjI7Y838vrH64UD2g170Zx5UlwGrbRRS23CqXpDIZAB3c6vxlnsKEnzpiv7Korlx3bS6GjVicmUNrKeKUZytXqSCfVHlfgjH1xNI4jTP8APkvbHHZGWDDG0HXC3dKzDM1KtTMs6h5l1AW24hWUrSRkEEcQRHn1q46BRHW2qxW6dTnHQVNpmplDZUBxICiMiPRaQhppLbaQlCQEpSOAA4RkDlIVz5Z2pz7TbgWxTkIk2yDuynJX6wtSh6ozOHUvjJuTOABlanErxpwh+Mk6LTxv6x8fywoHtBr3okYUCkKBGCMgxiLZDQPyl2jUelrQFsc+HpgKGQW2/HUD6dOn1xd/KlvWbo9Mk7XpU2piZn0l2bU2opUGB4oTnHBZ1Zwc4QRwMW7PCQywyvE7JPfoqlXi7n1n2JW4A2x1VnVO+bOpk0qVn7npLD6CUraVNI1JI4ggHIPpjrDaPYR+t9GHpmk/94xdb9IqFerUrSKWwX5yaXoaRnGekkk8AACT6Is0cny/Mf4ei/2pfuRal4RTgw2WXBVSLjNyfJiiyPmtDjaHYh+uFD9c6gf8Y/eTvizZyZblpW6qK++4oJQ2iebKlE8ABnJMZD2ibPa9YgkjW1SahOlYaMu6V/N05zkDHzhESSlSlBKUlSicAAZJiVnAq8rOeOQkd1HJx+xE/kkjAPzX9CCoR4c9edoyMyuWnLoosu8hRSpt2ebSpJHEEE5EUzt5uSrWzs6tqzW55TdSmJBtNSW29lZQhCUlJPHC1at+d+gjeCYz002486hlpCnHFqCUISMlRPACKlHgnxEfiPdgdP3Vu9xw15PDYzJ6/sty/l9Y/XCge0Gveh+X1j9cKD7Qa96M5o5Pt+KQCXaOnIzgzSsjsREL2hWRWbHqEvI1pyTU7MNc6jud0rGnJG/IBHCJYuE05XcjJslRS8Xuwt53w4C2PIXjadQmkSkhc9Gmphw4Q01PNqWo+QAHJj3EnMfz4ZDinkJaClOFQCAnjnoxG/6W3Ms02VanXg9MoZQl5wDAWsAalY85yYo8U4a2kW8rs5V7hXE3XubmbjC7MIQjKWwkIQgiQhCCJCEIIkIQgiQhCCJCEIIkIQgiQhCCJCEIIkIQgiQhCCJCEIIkDCOFGCKvdrlZU201RWFEc4Odfx+jnxU9oJ9Qjp39MG2NkbNNBUiZnAlg7wdJXlbmfNjUn1iOtQ5ZV039MT68Lk2XudUrG4pBw2n14HpAMRLblXk1W7e4GXAqXpqS0McOcJys/clPpSY3IYQXxwjp94r5Gay7kmtH833W+ilOxt5VF2ZV6ulvUWVPPJSd2sNtA/vyIrvk6Nqc2my6k7w3LPKPmGMfvMTW+3Ta+wGRpR8SZqWhChnCk6yXV5HTgDQfTHg8l2UWu7apPhJKGJHmifIVrSR+GYlB/wCCebucLpreWetB/wDIyfnqq/5Qcy3NbX66tpWpKVtN5HlSyhKh2giLI5Rrqn9gVpvrUVLcmZNaiekmVdMUnfM8ip3rW6i1nm5moPuoz+iXCR92IuDlEPBGweyJU/OWZVeP6MqoH+8IuSR8r6re37BRVZOf4l3f91HeT1dNQp1t12iSrnNpcfaeQsHxkakqSsjzkIRv6P3W3s8oCanOqnptsLlZdW4E7nF8cY8g4ny7uO+M97DedduSblWhqLssMJHSrWkD+9GvmRKWzbKQ4r83LNjUQN61nj6yT98Y/GuWKy89N04fAbM/NKfuMC7Fbq8lR5Tn5tzBO5CE71LPkEdGz6zO1puZmJiVSxLpWAwQSSd28Hy43b8DjFczUxP3FXEc4rU8+sIQnilsE8B5hFtyErLU2ntSzIS2yyjGTu9JP3kmPl61l9mUuGjB9Vv1rD7Mpc3Rg+q7cZm5c/1O/bv4eNMjhGZuXP8AU79u/h401pK2eTh9Alj/AGJLfhiLAxFf8nD6BLH+xJb8MROp19uVlHpl0kNtIUtZ8gAyYLwnAysncp64k1naMunMO65aktCXAC8p50+M4R5DvCT50RAbOozlw3XS6I3rBnZlDSlITkoQT4yseZOT6o6VVnpip1SaqM0srfmnlvOqPSpSiSe0xYfJvm7fpu0JVUuCoysiiVk3FSy316BzqilG48M6VL3Hy+aP0At+EpYaNQPr/wCr87Dhbu5ecAn6LXbDTbLKGmkJQ2hISlKRgAAYAAjrVyoy1Io07VZskS8mwt90gb9KUkn7hHkSF92bPzjMnJXNS5iYeWENNNzCVKWo8AAIg/KnuAUrZ6mktOBMzVnw1gEhQaRhayMefQkjyLMfEQVnyTtjcCMlfc2LUcUDpGkHA/8AFlqrz79Vq05U5ogzE2+t90jhqWoqP3mLf5JVCE7eU/XXUAt02W0Nk9DruQCP1UrH6wilo0tycrksu3dnaWp+4qfK1CYmnHplp9wIUg7kpAzxGlKTnyqPnj7Li7nMqFkYznTRfGcIDZLgfIcY11Vy3FVJeiUGfq81nmZKXW+sDiQlJOB590YLqE2/Pz8xPTS+cmJh1TzqsY1LUSSe0mNBcpPaNRqhabNu29VZWf7ueCptbCwsIbQQoJz5SrSd36J8sZ2Po7Iq8BqOiidI8YJ/wFa+0Fts0rY2HIH+StCckKgb6zc7qDjCZFhWfQtzd/8Ab3+mKr2y1/8AKTaTWKghYXLofMvL4OU8234oI8ysFX6xjQkoTsy5PIcKVNT7cjrOUALE0+dwIHHSpYHoRGS464b/AHFqWz02C44l/b1Yqw33PzV4ckm3u67lqVxPN5bkGQwySn/KOcSD5QlJH68aailtgVyWRbezWSlpq5KZLTsw45MTTbr4QoLKtIBB37kpSPVnpia1XahY0lTZmcRctNmVMtqWlll9KnHCBuSkDiTwjC4mJrFpxDTjYadlv8LdBWqtBeM7nVfjtK2Z0m/puTerFTqrCJNCkstSq20oyogqUdSFHJwkccbuHHMeoOwS0aPW5KqtVKtPuSb6H0NvOtaFKSQRqw2DjI8sVSrlAX6TkClAf6qfei0LT2g3K/sXrt7V8MIdbDiKfzLGkE7kJUcneOcVg/0TE8lXiFWINLsA6YB7qvHa4falLuTJGuSOyo7btcBuLadVZlDhXLyi+45feCAhvccEcQVa1D+lHZ5PdB+XtqdMC05Yp5M+742D+bI0en84UbvJmK+JJOTxMXbyaLps21ZOrv12rpkqhNOoQhK2lkc0kEggpScZUo5Gf5o9f0Fxrq9IsiGTjGi+fpubYvB8pwCc6+607uAjGnKBuD8oNqNTWhZVLyBEizlIBAbzr9I1lZB8mI0HdO2Cy5S26hNUqvys1Pol1mVZShRK3cYSMEDdnGfNmMfKKlKKlKKlKOST0mMngFN7Xule3GNBla32gusexsUbs51OFOtglEVXNqdHaKHCzKO92OqT/NDY1Jz5ivQPXG0BwxGfOSFb5S1WLoebAKyJGXVvzgYW55iCeb9aTGgxFDjk/i2i0fl0WhwGDwqocd3apCEIx1tpCEIIkIQgiQipdvu06tbPpqkM0mSkJkTrbqnO6ULOCgpxjSofpGLBseqzFds6jVqabbbfn5FmZcQ2CEpUtAUQMknGT5YnfWkZE2UjQ7KBlhj5DGNxuvZhCEQKdcE4MAd/GK/5RUzMyex2uzMnMOy76O59LjSylSczDYOCN43EiI9yS56dqGzuoPz85MTbqau4kLfdUtQHMs7sk8N53eeLLapNcz52OMKsbAE4hxuMq4oQhFZWUhCEESEIQRIQhBEhCEESEIQRIQhBEj8J7njKPdzgF7QrmwTgFWN33x+8fDziWm1OLUEoSCVE9AEF47GNVB63MymzyxXVslLk654jZI3uvEccfopAzjyDymKa2f0V25rylZV3U63rL82pRJJbByrPTvOE58pj9todzzN4XEHGW3BLNnmZJgZKiCfnY/SUcbh5hvxk2datOltmmz6ertWQkz6mw48gHO/g20CN2ckAnyk7yADG+OarDk/9j18h929ZAbpFH/Pr/hV1yla8moXfL0VlepqmM+P/AKVzCj6cJCPWTHtbHCbY2Q3Ndrmpp1xLhYKuC+aQQjHpcUpPpEU4+5P1utrdUFzM/PzBOEje44tXADzk8IuDb44zZ+x2jWVKrb52aUhLunI1pbw44seTLhQcecxYmi5I4qo3JGflqVzXmMk01x2wBx89As5gEnSN5O4RefK5CKfRbNojatSWG3h6kJaQk+vJ7Iq7ZnSlVzaDQqZzAfQ7Otl1vytJOtz/AHEqiY8rqoia2kykihYUmSpzaVjyLWpSj/ulEXpfv3omDoCf0UNEctSV56kD9V0uSrKia2paVJCkNyLjqvNpWjH34i/dqdQK5uXpqFeI2nnV4PFR3AeoZ/rRS/I7aKtoNUexuRSlJz6XWz/wMWVerxeumfXjGHAj+qAP+EfHfbKUtkLR1wFfjPh0DjdxXqbMJMP1t2aWkES7W7zKVuH3ao7e0qurLxo0sspQkAzBG4qzvCfRjefVHb2VoSilT0yd2XQknzJTn/miATT65qadmXTlx1ZWo+cnJj4Titt1Xh7ImaF+c+i0qv8AxVWgdVdlHdL9Jk31by4whZ9aQYzhy5/qd+3fw8aMoDZaocg0riiWbSfUkRnPlz/U79u/h4+ygyY257Baw2Vs8nD6BLH+xJb8MRPX2m3mVsuoS42tJStKhkEHiDEC5OH0CWP9iS34YiwIlXp1WYr35PldlZ1+ZtWYl56SUdTcu85zb6N58XJ8VQAxvJB80RQ7FdpeP5OD+2sH/njZGBDEbMXHrTGhpwfVYcv2fqvcXDI9Cs57CNlN0UO/ma1c1KEnLybLi2CX23NTpGkDCVH+apRz5QIl/KPsKv3nJUmYoLTUy9IF0Ll1OBClhzRvSVYTu0b8kRbmBHOIrP4nM+wLBxkeytM4XCysa+uD7rG3eW2l9Wj/AG2X9+OO8vtLx/Jo/wBtl/fjZUePelZbt61KpWnCnEnLLdSFcFLA8VPrVgeuL7eP2nENDRr6/us9/wBn6rGlxccD0/ZYUqUlM06ozNPnWw3MyrqmXkBQVoWkkKGRkHBBG6JFslt/8ptodHpS2kuS6nw7MBSSUlpHjqBx5QnT6VCIw844+8t11RW4tRUpR4kniYv/AJIVv5erNzvN7kgSLB9OFuf9P74+i4hOYKrnnfGPmV83w6uLFprBtn6BWVtys+p3pY3yZSZhDc0zMImUtuK0pe0pUNBPR87I6MgcOIzv3lNpeT/5dSR/rrHvxsfEMR8hT4rPUZyMxjzX2VzhEFt/iPJB8ljnvJ7S+ro/trHvw7ym0vq6P7ax78bGhiLf9QWuw9j+6qf05V7n6fsstWXyf7mn55tdzONUmRSv84ht1Lr7ifInTlKc+Und+iYvi77Mk6rs2m7MpiUSEuqWS1KhPzW1IIUjPEkakjJ4nf0xLcCEULPEbFh4e87bK/W4ZXrscxo33WO3diW0hLqkJoCHADjUmdZwfOMrBx6QI+e8ntKx/J0f21j342NiEXv6gtdh7H91Q/pyr3Pv/pY47ye0vq8P7ax78duj7CtoM5UGpedp7FNl1H85MuzLawgf0UKJJ8g4Z4kcY15DED9oLRGw9v8Aa9H2dqg5yff/AEvHs235C17bkqFTkkMSqNIUr5y1E5Uo+ckk+uPYhCMRzi4lztytxrQxoa3YJCEI8XSQhCCJCEIIs18s/wD9xtn/AEMx+9uLh2eVCSpOxu3qlUJhEtKS1El3XnVcEpDScn/8RT3LP/8AcrZ/0Uz+9uONslWelOTlY1KZWtAqErKl3B3KQ2wFaT+sUH9WPoTB49SvH3JWGJvBszP7AfouLu5SdSVUFs2nRZREshRAeqAUtbgxx0IUnRvz0qyMcI9DZ/yje6p9qSvGmS8qh04E7JBWhGSANTaiTjjlQJ/ox7XJKtqSkrFXcipdtU/UX3EB8jKgyhWkIHkGpKiccd2c4ERrlh23Jy6qPcsnKtMvzC1ys44kYU6QkFsnG4kALGeJGBnAEetZSfYNQR46ZzrleF9tkIsl/njHRWRykVpc2IV5xCgpKhLEEbwR3S1Gf9l+1+esGzZqh02jS81NTE4uaTMzDp5tGUNpxoGCr5hOdQ4iJ6/VX6ryNphUwtS3ZbmpXUrpSicQED1I0j1R7HI9p1PVY9Rqhkpcz4qbjImebHOhvmmTo1cdOTnHDMeRCOvTkbK3mw/HbskhfPaYYzy5aoxavKRrQqqW7no9PXIrIClySFtuNDO9WFKUFADo3emLx2g3tT7PtEXI+w9Pyy1IS13MUkKKwSk6icaT5RnjwMUfyyaVIS1Xt+qsSyG5ydbfRMOJGC4G+b0Z841kZ44wOgYkO1gk8lSgEkkmRpmT/wDTREclevN4EjG8oecELuOeaLxY3OyWjIKitX5StzPvA0e36VKNAeMmZU4+on0pKAOwx6dj8pGadqTUrd9Kk2pZ1wJVNyOtPMDyqbUVFQHE4IIGcAndEi5Hkux3vKlNBlsPrqq0KdCRqUkNNEAnjgFSt3nMQTlf0qSk70plRlmG2np6UPdGhATzikKwFkjirBAyehI8kWGx1JLBq+HjfXOuihc+1HALHiZ8sLQO0e9KZY9rrrlSCnUlYaYZb4vOKBISDwG4Ek9AB4nANATnKNvdyZdfkqDRmZJKhhDrTrqkA8ApYWkE+oeiJftVtOr3XsDtOYo7Ts3OU6RlZhTCN63UGXAVpH85Q3HHEjOMnAMR2JbapK06DLWncNKe7jlnFhqbljqWgLXqw42eOCpfjJOcADSTvMFOrH4BeGeI4HBGdgpbNiTxg0v5Gkb46q+Nk11zt6WVK3DO01unqmFLShtDpcC0pOkr3gYyoK3b9wG/fFa7TuUFL0apTFHtORYqMwwstuTkyVcwFg4ISkYKxxGcpGRu1DfE4vy7aa1sYq1z23OIdlnJJQlX5Y6dC3CGwobspUlSskEAgg5wYpTki27I1W7anWZ1hD6qUy33OlYyEOOFWFjzgNkDyZ8uIhq14eSSzK37rTo1S2J5eaOCN2p6ru25ylK61P4uOhU+YlCQFdxBbTiBnefHUoK3Z3eLv6RGh6HcNNrdttV+kvGck3Wi43zfzlYzlODjCgQRg43iIFym7dkatsvnqguWbVPUsoflniPGQNaQsZ8hSTu4ZCT0CIXyOalMuUm5aQ4vMtLrZmGgeIU4laV+rDaPvj2aGCxV+IibykHBH89V5HNNBP4MjuYEZBXTuTlLzi1ratu3GGk6vzb8+6VlQx0toxg/rmPNpPKTuxmcQur0OjzUr/ORLBxhz1KUpY+7fHR5IbDD+06cU8y24pmkuuNFaQShXOtJ1DyHCiM+QmLX5VVIkZvZc/UnWEGap8w0ph3HjJC1pQpOf0SCDjypHkEXJGU4rArGLOca5PVVmPtSQGx4m2dMdlYtnXFTbqtyTrtKcUqVmkakhYwtCgcKSodBBBB4jduJG+PYiluR6647szqCFqJS1WHUIB6BzLKsdpJ9cXTGDaiEMzoxsCtmtKZYmvPUJHysZGPLH1DEQKc6qv8AZ9s3kLbmVVCddTPT4UrmVlOENJ6CB+kRxPRwHSTUu3m+E3JW00enOJXSqes4cQch93gVeQgbwCPKTkgiLF5RtdrdItiXlae3zcnPrUxNTSVYUndkNjyahq3+RJHTFP7MLCqN6VQEBcvSmFDuqaxjz6EeVRHqGQTxAO/RaCDbndtsvleIHlIo1W4zupbycrQXP1hV1TzR7kkiUygUNzjxGCrzhIPaR0pMQPlBXQm5tos2JdeqTpo7iYwo4UUk61YzjeokZHEBMXrtfuen7OdniKXREtys7MNGWpzSCfzY/nu5znKQc5OSVEZzkxk2VYfm5pmVlmlPPvLS202gZK1KOAkDyk7oucPzYldafoNgqvEeWrC2mzU7u9VdPJNt0zVyVC5X2ssyDPMMKUg451ziUnypQCCPI4IqfaxWk3DtIr1WQpC2nZxSGlJVkKbRhtBz50pSY0lVG2dkWwN9hDqG6otgthxsp1LnHhjUncNWjeRkZKW4yKNwxwET8NPxFiSx02Clsx/DV46/Xc+qv3ket8zWqtMrHizDYYbPlUnxiOwiJ5fDHMXTOpxuUsLHnykE/eTEM2FJTQKbRppYCC+5z7ytWRpc3A/1NO7zRa21KmlSJeqtgkI/NO+YcUntyM+cR8V9qP7hz3jof8aLqs7x6TgN2n6L9tmGl2gz0uTvLxz6CgD/AIRA6fKLm6kxJAEKcdCDno374lmyqbCKhNyaj/hWwtPpScH9/wB0e5TLb7mvOaqihlgpLjO/+evOrs3/ANYR8la4e6/HXLdgcH0/gWxUb4sDMdNFKUAJSAOAEZn5c/1O/bv4eNMiMzcuf6nft38PH14GFqq2eTh9Alj/AGJLfhiLAiv+Th9Alj/Ykt+GIsCPUSEIQRIQhBEjy7ooFKuWju0itS6pmReKS40HVN6tKgob0kHiAePRHqQj0EtORuvHNDhg7KuTsS2adFvLH7a/78TC1bdpFsUhFJokoJWTQpSwjWpRyo5JJUST6zHrQiWSxNIMPcSPMqGOrDEeZjAD5BIQhEKnSEIGCJCPJty4KbX0z6qY8t1MjOuST5U2UgOt41AZ4jeN43Qt24KbXvlH5NdW4KfOuSMwVIKdLzeNQGeIGRvG6OixwzkbLgSNOMHdetCOMxzmOV2kIRwSIIuYRxmGYIuYRxmGfPBFzCOMxyTBEjgmOYhG22sXHQbBmapa4Bn23mkkcxzqtClBHip6TlSeg9O6O42GR4YOq4keGNLj0VM8sucaXcVAkUnLzMo48oeRK1gD8NXZEi2nWpN1vk2Wy7KM65uj06Um1oHzi2GAHAPQCFfqRCLS2VX5tBukV29kzknKOrC5p+cHNvupH8xtvcUeQZCUgHcDjB1cy0hplLTSEttoSEpSkYCQOAA6I2rVltVsMcbg4s1ONvRZNeA2HSyPGA7QLNHJx2q0C2bdmLcueackkNvKmJWYLanEKSoDU2QkEpOQVZ4HUeGBnwuUjtDpl8VOm0y3VuzMjIhay/oUkPur0jCUkBXigYyeJUd2ACbmvDYTYlwz659DE5SJh1RU6ae6lCFnHShSVJH6oTk7471h7HLKtCeRUJSUmJ+fbOW5mecDim/6KUhKQR0HTkeWPRdpNl+JaDz9umVyalt0fw5I5e/XChd2W4/avJJfpE4jROJbYemE9KXHJttZSfOnUE/qx3uR39GlR+2HfwWYtS7rep10W7M0GrIcXJTOjnAhelR0rCxg+lIjp2HZ9Fsmku0uhNvNyzswqYUHXCs6ylKTvPmSIpOuNfWfG78TnZVxtQssNePwhuFSnLS42n6Jz/oR6e1b/FTt/wD1GmfhoiztoOz63b5Ml8vtTDncXOczzTxRjXp1Zxx+YI/at2PQaxZMtZ860+qlyzbLTaUukLCWgAjKvQBEkd2NscLT+Q5Puo31JHSSuH5hgKvOR79GVQ+2HfwWYhvLM/lBb3+qvf30xfVh2fRbKpDtKobbyJZ19UwoOuazrKUpO8+ZIjz7+2cWzfE1KzNfZmXHJVCkNFp4oABIJ4ceEIrsbLxsH8Ov1SSo91MQjfRebTrxoNmbLLOnbgmVy8vNSMpLoWlsr0qMuFZIG/ACeIB4iKu5Q9e2WXHaa6hSJuSmrkUtsy7ss0pLik60hYdOBuCM4Ct+cYi4ro2a2pclv02iVWTfcl6WwGZJaJhSFtJCUpzuOFHCU/OB4RCZPk4WOxNJdeqFemmwcll2YaCVeYlLYOPQRHtSarG8Suc4OBzp1XlmKy9vhtALcKHcnGiT9y7K73oTnN9wThS3JqX81M1zZJUcb92GDET2D3m3s3vifkbkZelZSZHcs4dBKmHW1HCikbyBlYIG/fkcI1rb9GpdApDFJo8k1JyTCdLbTY3Dykk7ySd5JySd5iLbQdlVn3s8ZuqSTsvPlIT3ZKL5t0jdjOQUq3ADKgSBwiRvEo3vlbK08j+24UZ4fIxkboz95v1VYbf9r1r1qxnrdtmdXUH6gpIedS0ttLDaVpUc6wNRUQBgdGckbgfV5JdszVLs6qXBONraNXWkMJUMZaaCgFjp3qWr0hII3GPYtzk/WFSZ5M3MipVcpIUhqeeSWwQelKEp1ecKyD5ItdLLaGQy2hKG0p0pSkYAHDAiKxbgZB8PXzgnJJUkNWZ83jTYyBgALKnI9H/qbUfsZz8ZmLi5T30NVf8A0kv+MiPWsPZfallVh2q0JiabmXZcy6i7MFY0FSVHcenKRHv3hblMuugP0OrocXJvlJWG16VZSoKG/wBIELF2OS62cbDH0XUFR7KjoTuc/VVXyOfo2qv205+AxF2RHbCs2i2TSX6XQm3m5Z6YMwsOuFZ1lKUneejCBEiilblbNO6RuxKtVYzFE1jtwEhCEV1YXn3DRqbXqU9S6rLJmZR4DWgkjgcggjeCCOiPMuCrW7YFpqnJhLMjTpUaWmGUgFxRyQhCelR3ntJIAJiRxGtoVmUW9qN8nVZg6kZVLzCMB1hR6Unz4GRwOPMMSxObzBshPLnVQTMdyl0YHNjRY+2gXZUbzuZ6tVEhBX4rDAVlLDYO5A8vEknpJJ6Yunk27NlSyW7zrsqQ8pOaaysY0pI/wxHlIPi56MnpSR3dm+weVo1acqN0TTFVDDuZNhtJDagDkLcB4n/M3gdJVndJdvG0ZixLaVLyLyFV2eQUyje5XNDgXlDoA34zxV0EBWN2zdEwbVqDQ6fz9V8/S4e6Jxt29x08/wCbKmuVVeia3dbVsSLxVI0gnn9Kty5k/OzvwdA8XeAQSsRXezS2Hrvvam0JtK+aedCplaTjm2U71qzg4OMgZ3aiB0xHVrW44pxxSlrUSpSlHJJPEkxeOzm16tYwl6pPyrspVZlKHkhxOChvoQfOc+MN3kI3Rrua2lVETDrjT17rNsWeeQzyDIyMqc3LRXKJU1yeg9z4ywrG5SOjh0jgf/5FiWjPsXBbBlZr844hHMPpzvIxuV6xvz5QY5Hybe1uIcxoX2qYcHEecfvER61KHcVHubSlodzgaXnCr824gno6dXk+/cY+Je3OWuWhXgdUsh8I5opO3T+f4X4SFDqtKvKXZl2ytKHNaXT81TXBRJ6Dg49JHmizkjyxwB0mPqKdaq2uCGnQlfQVqzYAQ3YlIzNy5/qd+3fw8aZjM3Ln+p37d/DxZVlWzycPoEsf7ElvwxFgRX/Jw+gSx/sSW/DEWBBEhCEESEIQRIQhBEhCEESEIQRI4UcCOYGCKuOTs4h3ZTJ1JeAqdmZqYdJ6Tz6xk+pIiHWrXK3JbPaPUbeUyxP3ZdrqwH2ucSlpxbmoqTkHA5sE4IOOBiXTGyGmqE1JSdy3JIUWbcU49S5abCWPGzlKfFyEHO9O/MShdnUbnreVLoelmaAVGTYaUObOUaPHyCTgb85BzvOY0XTwhznb8xzt64HvhZTa8xa1uMcoxv5jJ9lB6jd9x2ZXLilK3Um69LSVETU2HO5Uy5bdU4W0snRxSo78neB9/wCNmXTfTt00Zuo/KlQkahqE+25bT0o1IqKMpLbqh4ydXi5UeG/p3Tuasyjzc/X5ud7omvl2XalplpxY0IbQkpAbwAU51Ened+8YjqWpY6aDU2Z1y5LgqglmDLyrM5NgttN7uKUhOo7uKs9HSAY58aHkOmvp5dO2vouvAsc4+8cZ7+fXvouztTr0xbOz6sVuUUlMxLMZaUpOQFqUEpOOnBUIiExObRJO9qNQXLkp7qqxIuuvhNPTiQLeklSN4Kwc6BqOM7yOiJ7eNuyN1W9MUKpLfTKTCm1OcyoBR0LSsDJB3EpGfNHBt2SN5puouzBnU08yCWyoc0EFzWVAYzqzuznh0RFDKxjMEZOvTyGPqp5oZHyZBwNOvnr9FWUlfF2C336UZ6VfrSrtct6XqK5cJAbABL5bGElQGRgYHDjg59IXFdlBvapUSr1aXqknTrceq/Ppk0srcUF6UpWAcZGlfDAIIj3p/ZpRJu3FUcTlTZPyoqqtzbT6UvtzJUTrCgnG7URw+8AxxJ7NqY0ay9M1etT01WZAyE3MzL6FL5sgg6MIAScHHDG4bs5JnM1cg6fT09lWENkEa/X1089eqiKLkvyUsqhVycrkm9P3M5LSEhLCSSGJVb+9L61fOUdCVHHAFQGCBk+xK1m6KLtFat6tXDLVCnMUd6qPzHcSWXFJCgjSoJJGEnKsjGc4OcZiSV+xqPVrNkbZccm5eXpwZMlMMOBL8uppOlC0qxuUBkZx0mIvaNpTEttWrszUXavUmE0ZqS7sqAyJnnFFSwghIThISkaUjdk53kkmyQva4kDrpj0xheOinY5oBJ21z759V8C7rkb2PW7V35llNdrE3LMId5lOnDz27CeH+D/7x5FxX3d1SrtfRbjtRlGKPMrk5diWt52eE2+2PGDrqQQ2CcAY34IJHDMsomy6nU6bpqpiuVqpSVJe56nSE08gssLGdKsBIKiknxcnxY/arbNpKbqk/OSVfr1IZqbgdn5SQmUttPLxvV80lKlbtRSfG++PWy12uOnfp57eyOhtOaNcbdfLf3Untaem6nblOqE/JuSM3MSrbj8stBSplwpBUkhW8YORvj0iAY4abS22lCSohIAGpRJ9ZO8x9RnE5OQtRoIABXAAEcwhHi6SPlagkFSlAADJJ6I+ozxysb7mpVTNkUuYLSX2Q9UloVvUgnCWSQcgEAqUMbwU78Eg2KtZ1mURt6qvZsNrxl7lOLo267P6HNLlUz0zVXWzhYp7IcSD5lqKUH1Ex1qFt/2fVN1LUw/UKUVHCTOy27PnLZWB6TgRD9j2wejzdvylbvJExMuzjQebkUOqbQ22oZTrKcKKsYOARjON8Squ8nuwp1Ta6c3P0opUkqQ1MqcQsA7wecKlbxkZChjjv4RoPZw1hMZLiR10wqTH33gPAAB6K2ZSYYm5VqalXm32HkBxp1tQUlaSMhQI3EEb8x+sdOdm5Ck01c1OTMvJScujK3HVhDbaeAyTuA4CK8f28bNmpnmRWJh1IOC4iTd0fenP3RmRwSS58NpK0Hzxx453AKz4R5FrXLRLnpgqVBqTE9LE4KmydSDjOFJOCk46CAY/K57ttq2WguvVuRp5KCtLbro5xaRxKUDxleoGOfDfzcuNey68RvLzZ0XuQirXNvezdLwQmqTa0/ppknMfeAfuiaWfd1u3dIrnLeqrE822QHEpylxvOca0KAUnODjI343R3JWmjHM9pA9FwyxFIcNcCV68xNyssQJiZZZKuGtYTntj9ULS4gLQoKSoZBByCIynysbkolcuSnSFMm+6Jmld0MTqeaWnmnNSd2VABXzT83I3RaWzLazYKLbti3DW1iqdySkjzPcT+Of0IRp1aNPzt2c48+ItScOkbXZMATnpjZVmX2OmdESBjz3VuQjw7ou23LYYD1frMnIBSSpCHXPziwOOlA8ZXqBiEnb3s358NiqzRSf8oJJ3T+7P3RVjrTSDLGkj0Vl9iKM4c4Aq0oR49z3NQ7ZpnylXqmxIS3BKnCdSzjOlKR4yjjoAJiEMbeNmzszzJq8w0kqADi5N3Sc+gEj1iEdaWQZY0keiPsRRnDnAKzzFFp2x3GdtP5E/J9K7g+VTJ87zbnO6NWM514z6sRdVMn5OpyLU9T5tiblXk6m3mXAtCx5QRuMZOR/jV/7Qn+/F3h0DJDIJBs0+6qXpns8PkO5C12IR4d33Xb9pU8T9wVRmRZUdKArKluHyJQkFSvUN3TEMlNu+zd+YDSqvMMAnAW7JuBJ34zkA4HnOP3xSjrTSN5mNJHorb7ETDyucAVZ8I+GXEutJcQoKQsBSSOkGPuIVMuMRANoGyOz70n3KlUmZyXqLiUpVNS0wQohIwBpVqR/uxYEIkilfE7mYcFRyRMkHK8ZCqCwdg9vWvdCK2/Pv1Yy+FSrMw0kJaXn55x85Q6NwAO/jjFn1ukSNYkTKTzWtB3pUDhSD5Qegx6GIR3LZlmfzvdkqNlWFjDGG6FeJbVtU+glwyaphS3AAtTjmcgeYYHrxHtYjmEROcXHJUkUTIWhjBgBAIQhHKkSMzcuf6nft38PGmYzNy5/qd+3fw8EVs8nD6BLH+xJb8MRYEV/ycPoEsf7ElvwxFgQRIQhBEhCEESEIQRIQhBEhCEESEIQRIQhBEhCEESEIQRIQhBEhiEIIkIQgiQhCCJCEIIuDGL9vh7o26VlE0ChBmJdCunCOabGfWN8bRPCMo8rO15mnXy3dDaHDJVRpCFuYyEPtp06c9GUJSRnjhWOEbHBHAWC09QQFlcXaTAHDoVqxPCPoxX2xnaNTL3tyVSubaRW2GgmdllKAWpSQAXEp6UnIO7cM4icT87KSEoubnppiVl0Y1uvOBCE5ON5O4cYy5YnxPLHDVaMcrJGBzTosucrK6puoXs3ajS3EyNNQhbrQO519aQoKO/fhCkgZ4Eq8sT63uTvaiLYbYrb089VnW0qemGH9IZX0pQMYIHDKgScZ3ZwKl5TErMyG2iozTrRCJpuXmWD+kkNJQT/WbUPVGuqLVJGsUeVqtOmETEnMtB1pxJ3FJ/cfKOIO6Nu1NJXqQ+CcAjXHfRZFaJk9mUyjJB+iyHZc5Vdk+2tVJemVGXTOJk50Hcl+XWRpc05ODpUlY35HDO8x7fLDA75FNPT8jt/jPRHdoT7N67fJn5GXzzU9UmJVpxBBSrQG2isEcU+ISCOjfEj5Yn0kU77Hb/GejRaM2oXu/EWnPsqB0rSsH4Q4Y91Zcrye7BNJ5sqq63nEhQmFTQ5xHoATp7UmKj2FInLY5QTVCMwF6X5unTKmxgOhCV/drbSfVGuZL/4Nn/Rp/dGTbK/xsHvt6of9aM6lYlnZOyR2RyndXrcEcL4nRjByF9cqS0aZbl0StSkHZpT1acmJqZDqwUpXrScIwBgeMfLFi7NNiVpKpNsXZ3XWO7izKVHRz7fN87pQ5jGjOnV0Z4dMRvlmj/xS2t3+RmP7zcXjsxI72tr/AGPKfgpjyzZmbRiIcdc5XUFeJ1yQFu2FmzlbsttbU2VISAXqYytzznW4n9wAi5qZsJ2fU92UmGpKcXMSr7bwddmSvnChQOlST4pScbxgcTwinOV39KMp9lNfiOxrM/NzHN2eWKrAGOIyD+i9qwxyWJi8ZwVja9p2pbVttgpLM2BLLnVSUjg6m2WEE6nAN2SQlSz5eGcARbVycni1VWs+zQnZ9qrtNqUw+8/qDyxvCVjAAB4ZSARnO/hFN7PCzYm3mSarDnMs06ovSrjrg0pwpK2kuEngnxgrJ6N8bErlUkaLRpqrVF9LMpKtF11ZPAAdHlJ4AdJ3RNxGeWu6JkBw3AxjqoqMMU7ZHzDJzr5LMnJNu6akLxVajzylSFTbWtlsgnQ+hOrI8gKEqB8pSmPOR/jVf7Qn+/HS5M8pNVHbRTZtptOmVbmJmYxuCUFtSMj9ZxI9cd1H+NV/tCf78XZWNbZlI3LNfVVI3OMEYPR2i+OVM7UFbXXW6mXBJolWe4wAB+ZI8YjynnOc3nyeTEWlbmy7YxdsjLTVuOKfSwULe5ifWXF9Ol5tZJRnB3AJPHGIsbaBZFu3xTESFelS4Wioy77StDrCiMEpV2biCDgZBwIyttOtCpbJb1kZij1txRWDMSUw34jzYCsFKwNx3YB6FAkY4iKVWYW4mQRvLHtHyKt2IjWldK9oc0n5hbPSAI5iP7Oq45clj0euPICHpyUQ46AnSnnMYVpG/wAXUDjfwxEgj597Sxxadwtxjg5oI2KQhCOV0kIQgiQhCCJCEIIkZm5c/wBTv27+HjTMZm5c/wBTv27+Hgitnk4fQJY/2JLfhiLAiv8Ak4fQJY/2JLfhiLAgiQhCCJCEIIkIQgiQhCCJCEIIkIQgiQhCCJCEIIkIQgiQhCCJCEIIkIQgiQhCCJCEIIkeZc9BpVyUWYpFZlETUm+MLQrcQRwIPEEdBEenCPWuLTkbrxzQ4YKzBdHJurjE4pVtVmTmpQkkInSpp1A6BlKSlXp8X0R0qdyer8qEy2KxVadLS4OlSlPrfWlP+anGD6CoRqyEag4zaDcZHrjVZx4VXzkA+mVXO0fZdKXvatOkahUVorNPZShqppZ3rOAF60Z3pURnGdxxg8QaYa2I7V5KWeo8rVpb5OmTl9DNScTLrP8AnIIGr+qY1bCIa/Ep4G8owR5jKlm4fDM7mOh8lUGxLYyxZM2K5WJpqerQQUNhoHmZYKGFaSQCpRGRqwNxIxxJ87b5snua/LulKtRpmltS7MgmWUJp5aFag44rdpQoYwsffF4QjgX5xN4+fvLo0oTF4WNF+csgtyzbavnJQAceYRRtu7Irop+3Fy9n5mlGmqqc1NhCHll7Q7zmncUYz44yM+uL2hiIobMkPNy/mGCpJa7JeXm6aqr+UFs4nL/o0i5Sphtqp05ayyh5WG3UL06kkgEg+Ikg8OIPHIqG3tme28vSckp9+nSUg6h6WbnKsFyqFNqCkfm21L4EA/NjV0IsQcRmhi8IAEeY2UEtCKWTxCSD5KitumyS6L6vGWrNJmaU0w3Ity60zL60q1JWtRxpQRjxh0xeY3jBj6xCK8tmSVjWO2bsp4q7I3Oc3d26qHbbsaYvaaNbosyzT61oCXS6k81NADA1lIJCgN2rB3AAjgRWD+xHavPMs0icq0sunSxHMJfqTimEedCNJ0/1RGrYRag4pYhYGDBA2yNlXl4dDK4uORnsoJsh2cUzZ7SXmWHlTtQmiDNTakadQGdKUpydKRk9JJJJ8gEBTsgugbbfy17ppPyb8qmc0c8vntGrONOjGfNn1xfMIgbdma9z86uGCpXU4nNa3GjdQqM2u7NdodZvt66rVuFtjMslhlpE05LPMoA3oSpIwQValbyPnY6IiMjsK2gXFWWZy866hLYIS687NqmZnQN+EZyPLxOBknB4HUOIRPHxSeJga3AxpnGqifw6GR5c7OvTOi6lFp0rSKRJ0uRb5uVk2EMMoyTpQlIAGTvO4cTHbhCM8kk5KvAYGAkIQjxepCEIIkIQgiQhCCJGZuXP9Tv27+HjTMZm5c/1O/bv4eCKGbKeVxZdo7Nretietq4H5ml09qVdcZDOhakJAJTlYON3SIk3htWD1TubsY+JCEETw2rB6p3N2MfEh4bVg9U7m7GPiQhBE8NqweqdzdjHxIeG1YPVO5uxj4kIQRPDasHqnc3Yx8SHhtWD1TubsY+JCEETw2rB6p3N2MfEh4bVg9U7m7GPiQhBE8NqweqdzdjHxIeG1YPVO5uxj4kIQRPDasHqnc3Yx8SHhtWD1TubsY+JCEETw2rB6p3N2MfEh4bVg9U7m7GPiQhBE8NqweqdzdjHxIeG1YPVO5uxj4kIQRPDasHqnc3Yx8SHhtWD1TubsY+JCEETw2rB6p3N2MfEh4bVg9U7m7GPiQhBE8NqweqdzdjHxIeG1YPVO5uxj4kIQRPDasHqnc3Yx8SHhtWD1TubsY+JCEETw2rB6p3N2MfEh4bVg9U7m7GPiQhBE8NqweqdzdjHxIeG1YPVO5uxj4kIQRPDasHqnc3Yx8SHhtWD1TubsY+JCEETw2rB6p3N2MfEh4bVg9U7m7GPiQhBE8NqweqdzdjHxIeG1YPVO5uxj4kIQRPDasHqnc3Yx8SHhtWD1TubsY+JCEETw2rB6p3N2MfEh4bVg9U7m7GPiQhBE8NqweqdzdjHxIeG1YPVO5uxj4kIQRPDasHqnc3Yx8SHhtWD1TubsY+JCEETw2rB6p3N2MfEh4bVg9U7m7GPiQhBE8NqweqdzdjHxIeG1YPVO5uxj4kIQRPDasHqnc3Yx8SHhtWD1TubsY+JCEETw2rB6p3N2MfEh4bVg9U7m7GPiQhBE8NqweqdzdjHxIeG1YPVO5uxj4kIQRPDasHqnc3Yx8SHhtWD1TubsY+JCEETw2rB6p3N2MfEh4bVg9U7m7GPiQhBE8NqweqdzdjHxIeG1YPVO5uxj4kIQRPDasHqnc3Yx8SKm5Q/KItXaV8h/JlFrUl8nd0c53Qlo6+c5vGNKzw0HthCCL//2Q==';
+  doc.addImage(logoData, 'PNG', PW-ML-58, y, 58, 18);
+
+  // Title block (left side) — medium border like Excel B2:J2
+  doc.setFillColor(255,255,255);
+  borderBox(ML, y, 80, 16, [0,0,0], 0.8);
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(14);
+  doc.setTextColor(0,0,0);
+  doc.text('Protocole de réception', ML+2, y+8);
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(9);
+  doc.text('Réception selon art. 157ff. Norme SIA 118', ML+2, y+13);
+
+  y += 22;
+
+  // ── PROJET ────────────────────────────────────────────────
+  label('Projet:', ML, y, 9, true);
+  fieldVal(f('projet'), ML+22, y, 100);
+  y += 7;
+
+  // ── MAITRE D'OEUVRE ───────────────────────────────────────
+  label("Maître d'oeuvre:", ML, y, 9, true);
+  fieldVal(f('maitre'), ML+22, y, 100);
+  y += 7;
+
+  // ── CHEF DE PROJET / REMPLACE ─────────────────────────────
+  label('Chef de Projet :', ML, y, 9, true);
+  fieldVal(f('chef_projet'), ML+28, y, 52);
+  label('remplacé par:', ML+84, y, 9, false);
+  fieldVal(f('remplace_par'), ML+106, y, CW-106);
+  y += 7;
+
+  // ── ENTREPRENEUR ──────────────────────────────────────────
+  label('Entrepreneur', ML, y, 9, true);
+  fieldVal(f('entrepreneur'), ML+22, y, 70);
+  // Address (static)
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(8);
+  doc.setTextColor(80,80,80);
+  doc.text('Z.I. En Budron E7, 1052 Le Mont-sur-Lausanne', ML+96, y-1);
+  doc.text('Vaud - Suisse', ML+96, y+4);
+  doc.text('Une société de Johnson Controls', ML+22, y+4.5);
+  y += 10;
+
+  // ── CONTRAT / OFFRE / CLUSTER ─────────────────────────────
+  label('Contrat de travail du :', ML, y, 8.5, true);
+  fieldVal(fd('contrat_date'), ML+34, y, 24);
+  label("N° d'offre:", ML+62, y, 8.5, true);
+  fieldVal(f('no_offre'), ML+76, y, 26);
+  label('Cluster:', ML+106, y, 8.5, true);
+  fieldVal(f('cluster'), ML+117, y, CW-117);
+  y += 7;
+
+  // ── CONCERNE / VREF / PROJET ──────────────────────────────
+  label('Concerne travaux:', ML, y, 8.5, true);
+  fieldVal(f('travaux'), ML+28, y, 30);
+  label('V/Réf.:', ML+62, y, 8.5, true);
+  fieldVal(f('vref'), ML+74, y, 26);
+  label('Projet:', ML+104, y, 8.5, true);
+  fieldVal(f('no_projet'), ML+114, y, CW-114);
+  y += 8;
+
+  // ── MATERIEL TIERS ────────────────────────────────────────
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(8.5);
+  doc.setTextColor(0,0,0);
+  const matText = "Le matériel suivant, livré par des tiers ou mis à disposition par le commettant n'est pas couvert par la";
+  doc.text(matText, ML, y);
+  y += 4;
+  doc.text("garantie de Tyco Integrated Fire & Security :", ML, y);
+  y += 2;
+  // yellow field for material
+  const matVal = f('materiel_tiers');
+  doc.setFillColor(255,255,204);
+  doc.rect(ML+38, y-4, CW-38, 6, 'F');
+  hline(ML+38, y+2, ML+CW);
+  if (matVal) {
+    doc.setFont('helvetica','normal');
+    doc.setFontSize(8.5);
+    doc.text(doc.splitTextToSize(matVal, CW-40)[0], ML+39, y+0.5);
+  }
+  // main yellow input line below
+  doc.setFillColor(255,255,204);
+  doc.rect(ML, y+3, CW, 5, 'F');
+  hline(ML, y+8, ML+CW);
+  y += 13;
+
+  // ═══════════════════════════════════════════════════════════
+  // PROTOCOLE DE TEST
+  // ═══════════════════════════════════════════════════════════
+  sectionTitle('Protocole de test', ML, y, 11);
+  y += 6;
+
+  // ── ESSAI DATE / PAR ──────────────────────────────────────
+  label("L'essai de réception a été exécuté le:", ML, y, 8.5, true);
+  fieldVal(fd('essai_date'), ML+59, y, 25);
+  label('par:', ML+88, y, 8.5, false);
+  fieldVal(f('essai_par'), ML+94, y, CW-94);
+  y += 7;
+
+  // ── MS CENTRALE / MS INSTALLATION ────────────────────────
+  label('M.S. centrale:', ML, y, 8.5, false);
+  fieldVal(radio('ms_centrale'), ML+22, y, 14);
+  label('M.S. Installation:', ML+40, y, 8.5, false);
+  fieldVal(radio('ms_installation'), ML+62, y, 14);
+  y += 8;
+
+  // ── RESULTAT ──────────────────────────────────────────────
+  label('Résultat:', ML, y, 8.5, false);
+
+  // Three result boxes side by side
+  const resW = 50, resX1 = ML+20, resX2 = ML+74, resX3 = ML+128;
+  const rTypes = ['ok','sec','maj'];
+  for (let i=0; i<3; i++) {
+    const rx = [resX1,resX2,resX3][i];
+    const isSelected = selectedResult === rTypes[i];
+    // box
+    doc.setFillColor(isSelected ? 220 : 245, isSelected ? 240 : 245, isSelected ? 220 : 245);
+    if (isSelected) {
+      if (rTypes[i]==='ok') doc.setFillColor(200,235,200);
+      else if (rTypes[i]==='sec') doc.setFillColor(255,240,180);
+      else doc.setFillColor(255,210,200);
+    }
+    doc.rect(rx, y-5, resW-4, 9, 'F');
+    doc.setDrawColor(isSelected ? 60 : 180, isSelected ? 120 : 180, isSelected ? 60 : 180);
+    doc.setLineWidth(isSelected ? 0.6 : 0.3);
+    doc.rect(rx, y-5, resW-4, 9, 'S');
+    // checkbox circle
+    doc.setDrawColor(0,0,0);
+    doc.setLineWidth(0.4);
+    doc.circle(rx+3, y-1, 1.5, isSelected ? 'FD' : 'S');
+    if (isSelected) { doc.setFillColor(0,0,0); doc.circle(rx+3, y-1, 0.8, 'F'); }
+    // text
+    doc.setFont('helvetica', isSelected ? 'bold' : 'normal');
+    doc.setFontSize(8.5);
+    doc.setTextColor(0,0,0);
+    doc.text(resultLabels[rTypes[i]], rx+7, y);
+    doc.setFont('helvetica','normal');
+    doc.setFontSize(7.5);
+    doc.setTextColor(100,100,100);
+    doc.text(artLabels[rTypes[i]], rx+7, y+3.5);
+  }
+  y += 10;
+
+  // ── REMARQUES ─────────────────────────────────────────────
+  label('Remarques', ML, y, 9.5, true);
+  y += 3;
+  const remarques = f('remarques');
+  // 4 input lines
+  for (let i=0; i<4; i++) {
+    doc.setFillColor(255,255,204);
+    doc.rect(ML, y, CW, 5.5, 'F');
+    hline(ML, y+5.5, ML+CW);
+    if (i===0 && remarques) {
+      const rLines = doc.splitTextToSize(remarques, CW-2);
+      if (rLines[i]) {
+        doc.setFont('helvetica','normal');
+        doc.setFontSize(8.5);
+        doc.setTextColor(0,0,0);
+        doc.text(rLines[i] || '', ML+1, y+4);
+      }
+    } else if (i>0 && remarques) {
+      const rLines = doc.splitTextToSize(remarques, CW-2);
+      if (rLines[i]) {
+        doc.setFont('helvetica','normal');
+        doc.setFontSize(8.5);
+        doc.setTextColor(0,0,0);
+        doc.text(rLines[i], ML+1, y+4);
+      }
+    }
+    y += 5.5;
+  }
+  y += 3;
+
+  // ── DELAI REMISE ──────────────────────────────────────────
+  label('Délai pour remise en état:', ML, y, 9.5, true);
+  fieldVal(f('delai_remise'), ML+43, y, CW-43);
+  y += 8;
+
+  // ── INSTRUCTION ───────────────────────────────────────────
+  label("L'instruction sur l'installation a été donnée à:", ML, y, 9.5, true);
+  y += 4.5;
+  label('(Min. 2 personnes, Nom + N° de tel.)', ML, y, 8.5, true);
+  y += 2;
+
+  // persons — two columns
+  const maxPersons = Math.max(persons.length, 2);
+  const halfP = Math.ceil(maxPersons/2);
+  for (let i=0; i<halfP; i++) {
+    const p1 = persons[i] || {name:'',tel:''};
+    const p2 = persons[i+halfP] || {name:'',tel:''};
+    const colW = (CW-4)/2;
+    const val1 = [p1.name, p1.tel].filter(Boolean).join('  –  ');
+    const val2 = [p2.name, p2.tel].filter(Boolean).join('  –  ');
+    doc.setFillColor(255,255,204);
+    doc.rect(ML, y, colW, 5.5, 'F');
+    hline(ML, y+5.5, ML+colW);
+    doc.rect(ML+colW+4, y, colW, 5.5, 'F');
+    hline(ML+colW+4, y+5.5, ML+CW);
+    if (val1) { doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(0,0,0); doc.text(val1, ML+1, y+4); }
+    if (val2) { doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(0,0,0); doc.text(val2, ML+colW+5, y+4); }
+    y += 5.5;
+  }
+  y += 5;
+
+  // ── ANNEXES ───────────────────────────────────────────────
+  label('Annexes:', ML, y, 9.5, true);
+  y += 5;
+  const annexes = [
+    {id:'ann-docs', txt:'Documents techniques révisés'},
+    {id:'ann-mode', txt:"Mode d'emploi, prescriptions"},
+    {id:'ann-cahier', txt:'Cahier de contrôle'},
+    {id:'ann-plan', txt:'Plan pompiers'},
+  ];
+  // Two columns
+  checkboxRow(cb('ann-docs'), 'Documents techniques révisés', ML+4, y);
+  checkboxRow(cb('ann-mode'), "Mode d'emploi, prescriptions", ML+4+CW/2, y);
+  y += 6;
+  checkboxRow(cb('ann-cahier'), 'Cahier de contrôle', ML+4, y);
+  checkboxRow(cb('ann-plan'), 'Plan pompiers', ML+4+CW/2, y);
+  y += 8;
+
+  // ── ETAT REMISE ───────────────────────────────────────────
+  const etatRemise = document.querySelector('input[name="etat_remise"]:checked')?.value;
+  checkboxRow(etatRemise==='remise', "L'installation est remise (Art. 159,160).", ML+4, y, 9.5);
+  y += 7;
+  checkboxRow(etatRemise==='reportee', 'La remise est reportée à une date ultérieure (Art. 161).', ML+4, y, 9.5);
+  y += 10;
+
+  // ── LIEU / DATE ───────────────────────────────────────────
+  label('Lieu:', ML+2, y, 9.5, true);
+  fieldVal(f('lieu'), ML+10, y, 48);
+  label('Date:', ML+62, y, 9.5, true);
+  fieldVal(fd('date_sign'), ML+72, y, 34);
+  y += 9;
+
+  // ── SIGNATURES ────────────────────────────────────────────
+  const sigW = (CW-8)/3;
+  const sigTitles = ['Entrepreneur:\nJohnson Controls / Tyco', "Maître d'oeuvre:", 'Mandataire / Client final :'];
+  const sigIds = ['sig-entrepreneur', 'sig-maitre', 'sig-client'];
+
+  for (let i=0; i<3; i++) {
+    const sx = ML + i*(sigW+4);
+    // signature box
+    doc.setFillColor(245,245,245);
+    doc.rect(sx, y, sigW, 28, 'F');
+    doc.setDrawColor(0,0,0);
+    doc.setLineWidth(0.4);
+    doc.rect(sx, y, sigW, 28, 'S');
+    // title
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(8.5);
+    doc.setTextColor(0,0,0);
+    const titleLines = sigTitles[i].split('\n');
+    titleLines.forEach((tl, ti) => doc.text(tl, sx+2, y+4+ti*4));
+    // Pre-filled name under title
+    const nameSubtitle = i===0 ? f('chef_projet') : '';
+    if (nameSubtitle) {
+      doc.setFont('helvetica','normal');
+      doc.setFontSize(7.5);
+      doc.setTextColor(80,80,80);
+      doc.text(nameSubtitle, sx+2, y+12);
+    }
+    // signature line
+    hline(sx+2, y+24, sx+sigW-2, [100,100,100], 0.3);
+    // draw actual signature if available
+    const canvas = document.getElementById(sigIds[i]);
+    if (canvas && sigStates[sigIds[i]]) {
+      doc.addImage(canvas.toDataURL('image/png'), 'PNG', sx+2, y+11, sigW-4, 13);
+    }
+  }
+
+  // ── FOOTER ────────────────────────────────────────────────
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(7);
+  doc.setTextColor(120,120,120);
+  doc.text('Tyco Integrated Fire & Security SA  –  Z.I. En Budron E7, 1052 Le Mont-sur-Lausanne  –  Vaud, Suisse', ML, PH-8);
+  const today = new Date().toLocaleDateString('fr-CH');
+  doc.text(`Généré le ${today}`, PW-MR, PH-8, {align:'right'});
+
+  return doc;
+}
+function generateAndDownloadPDF() {
+  const doc = generatePDFDoc();
+  const proj = v('projet') || 'protocole';
+  doc.save(`Protocole_Reception_${proj.replace(/\s+/g, '_')}.pdf`);
+  showToast(t('toast_pdf'));
+}
+
+function openEmailModal() {
+  const overlay = document.getElementById('email-overlay');
+  overlay.style.display = 'flex';
+  // Pre-fill to with maitre if it looks like an email
+  const m = v('maitre');
+  if (m.includes('@')) document.getElementById('email-to').value = m;
+}
+
+function closeEmailModal() {
+  document.getElementById('email-overlay').style.display = 'none';
+}
+
+function sendByEmail() {
+  const to = document.getElementById('email-to').value.trim();
+  if (!to) {
+    document.getElementById('email-to').focus();
+    document.getElementById('email-to').style.borderColor = 'var(--accent)';
+    showToast('⚠ Veuillez saisir une adresse e-mail');
+    return;
+  }
+  document.getElementById('email-to').style.borderColor = '';
+
+  const btn = document.getElementById('btn-send-email');
+  btn.textContent = '⏳ Génération du PDF...';
+  btn.disabled = true;
+
+  setTimeout(() => {
+    // 1. Generate and download PDF
+    const doc = generatePDFDoc();
+    const proj = v('projet') || 'protocole';
+    const filename = `Protocole_Reception_${proj.replace(/\s+/g, '_')}.pdf`;
+    doc.save(filename);
+
+    // 2. Build email
+    const cc = document.getElementById('email-cc').value.trim();
+    const extraMsg = document.getElementById('email-message').value.trim();
+    const resultLabels = { ok: 'Pas de défaut (Art. 159)', sec: 'Défauts secondaires (Art. 160)', maj: 'Défauts majeurs (Art. 161)' };
+    const subject = encodeURIComponent(`Protocole de réception – ${v('projet') || 'Projet'}`);
+    const bodyLines = [
+      `Bonjour,`,
+      ``,
+      `Veuillez trouver ci-joint le protocole de réception pour le projet : ${v('projet') || '—'}.`,
+      ``,
+      `📋 Résumé :`,
+      `  • Projet       : ${v('projet') || '—'}`,
+      `  • Date essai   : ${formatDate(v('essai_date'))}`,
+      `  • Résultat     : ${selectedResult ? resultLabels[selectedResult] : '—'}`,
+      `  • Lieu / Date  : ${v('lieu') || '—'} / ${formatDate(v('date_sign'))}`,
+    ];
+    if (extraMsg) { bodyLines.push(''); bodyLines.push(extraMsg); }
+    bodyLines.push('');
+    bodyLines.push(`Cordialement,`);
+    bodyLines.push(v('chef_projet') || 'Johnson Controls / Tyco');
+    const body = encodeURIComponent(bodyLines.join('\n'));
+
+    // 3. Open mail client
+    let mailto = `mailto:${encodeURIComponent(to)}?subject=${subject}&body=${body}`;
+    if (cc) mailto += `&cc=${encodeURIComponent(cc)}`;
+    window.location.href = mailto;
+
+    btn.textContent = '⬇ Télécharger & Ouvrir le mail';
+    btn.disabled = false;
+    closeEmailModal();
+
+    showToast(`✓ PDF téléchargé — Joignez "${filename}" à votre e-mail`);
+  }, 200);
+}
+
+function resetForm() {
+  if (!confirm(t('reset_confirm'))) return;
+  document.querySelectorAll('input[type="text"], input[type="email"], input[type="date"], input[type="tel"], textarea, select').forEach(el => el.value = '');
+  document.querySelectorAll('input[type="checkbox"]').forEach(el => el.checked = false);
+  document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
+  document.querySelector('input[name="ms_centrale"][value="NON"]').checked = true;
+  document.querySelector('input[name="ms_installation"][value="OUI"]').checked = true;
+  selectedResult = null;
+  document.querySelectorAll('.result-card').forEach(c => c.classList.remove('selected-ok', 'selected-sec', 'selected-maj'));
+  ['sig-entrepreneur', 'sig-maitre', 'sig-client'].forEach(clearSig);
+  goToStep(1);
+  showToast(t('toast_reset'));
+}
+
+// Set today's date as default for signature date
+document.getElementById('date_sign').valueAsDate = new Date();
+
+// Help modal
+function openHelp() {
+  document.getElementById('help-overlay').classList.add('open');
+}
+function closeHelp() {
+  document.getElementById('help-overlay').classList.remove('open');
+}
+
+// Apply translations on load
+applyTranslations();
+
+// Close email modal on overlay click
+document.getElementById('email-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeEmailModal();
+});
+</script>
+
+<!-- PWA INSTALL BANNER -->
+<div id="install-banner" style="
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--navy);
+  color: white;
+  padding: 14px 16px;
+  padding-bottom: max(14px, env(safe-area-inset-bottom));
+  z-index: 9999;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+  border-top: 3px solid var(--gold);
+">
+  <div style="flex:1;">
+    <div style="font-size:13px; font-weight:600; margin-bottom:2px;" data-i18n="install_title">📲 Installer l'application</div>
+    <div style="font-size:11px; color:rgba(255,255,255,0.65);" data-i18n="install_subtitle">Accès rapide depuis votre écran d'accueil, fonctionne hors ligne</div>
+  </div>
+  <button onclick="installApp()" style="
+    background: var(--gold);
+    color: var(--navy);
+    border: none;
+    padding: 10px 18px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 4px;
+    cursor: pointer;
+    white-space: nowrap;
+  ">Installer</button>
+  <button onclick="dismissInstall()" style="
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.5);
+    font-size: 22px;
+    cursor: pointer;
+    padding: 4px 8px;
+    line-height: 1;
+  ">×</button>
+</div>
+<!-- iOS INSTALL TIP (shown only on iOS Safari) -->
+<div id="ios-install-tip" style="display:none;
+  position: fixed;
+  bottom: 70px; left: 50%; transform: translateX(-50%);
+  background: var(--navy);
+  color: white;
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-size: 13px;
+  text-align: center;
+  z-index: 9998;
+  max-width: 300px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  border: 1px solid var(--gold);
+  line-height: 1.6;
+">
+  <div style="font-weight:700; margin-bottom:6px;">📲 Installer sur iPhone / iPad</div>
+  <div>Appuyez sur <strong>&#x26F6;</strong> puis<br><strong>« Sur l'écran d'accueil »</strong></div>
+  <button onclick="document.getElementById('ios-install-tip').style.display='none'" style="
+    margin-top:10px; background:var(--gold); color:var(--navy);
+    border:none; padding:6px 16px; border-radius:4px;
+    font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif;
+  ">OK</button>
+</div>
+<script>
+// Show iOS tip on first visit via Safari on iOS
+(function(){
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  const isStandalone = window.navigator.standalone === true;
+  if (isIOS && isSafari && !isStandalone && !localStorage.getItem('ios-tip-dismissed')) {
+    setTimeout(() => {
+      document.getElementById('ios-install-tip').style.display = 'block';
+    }, 4000);
+    document.getElementById('ios-install-tip').querySelector('button').addEventListener('click', () => {
+      try { localStorage.setItem('ios-tip-dismissed','1'); } catch(e){}
+    });
+  }
+})();
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    // Inline service worker via blob
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(reg => {
+        console.log('Service Worker enregistré :', reg.scope);
+        // Vérifier les mises à jour
+        reg.addEventListener('updatefound', () => {
+          const newWorker = reg.installing;
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              showToast('🔄 Mise à jour disponible — Rechargez la page');
+            }
+          });
+        });
+      })
+      .catch(err => console.log('SW non disponible (mode local):', err));
+  });
+}
+
+// ── PWA Install prompt ──────────────────────────────────────────────
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  // Show install banner after 3 seconds if not already installed
+  setTimeout(() => {
+    if (deferredPrompt) showInstallBanner();
+  }, 3000);
+});
+
+function showInstallBanner() {
+  const banner = document.getElementById('install-banner');
+  if (banner) banner.style.display = 'flex';
+}
+function installApp() {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(() => {
+    deferredPrompt = null;
+    const banner = document.getElementById('install-banner');
+    if (banner) banner.style.display = 'none';
+  });
+}
+function dismissInstall() {
+  const banner = document.getElementById('install-banner');
+  if (banner) banner.style.display = 'none';
+}
+
+window.addEventListener('appinstalled', () => {
+  const banner = document.getElementById('install-banner');
+  if (banner) banner.style.display = 'none';
+  showToast(t('toast_installed'));
+});
+</script>
+</body>
+</html>
