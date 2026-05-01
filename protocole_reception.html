@@ -1,14 +1,3 @@
-
-
-Aller au contenu
-Utiliser Gmail avec un lecteur d'écran
-Conversations
-Concluez des accords plus rapidement avec les signatures électroniques intégrées
-Recueillez rapidement des signatures numériques directement depuis des PDF et des documents Google Docs. Profitez aussi de 2 To d'espace de stockage, d'outils basés sur l'IA et plus encore.
-55 % sur 15 Go utilisés
-Conditions d'utilisation · Confidentialité · Règlement du programme
-Dernière activité sur le compte : il y a 0 minute
-Ce compte est ouvert depuis 2 autres emplacements. · Détails
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -45,8 +34,8 @@ Ce compte est ouvert depuis 2 autres emplacements. · Détails
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:system-ui,sans-serif;background:#f5f5f5;color:#111}
 :root{
-  --navy:#1a2744;--gold:#c9a84c;--red:#c8392b;--green:#2d6a4f;
-  --border:#ddd;--muted:#777;--bg:#f5f5f5
+  --navy:#003366;--gold:#5DB446;--red:#c8392b;--green:#5DB446;
+  --border:#ddd;--muted:#555;--bg:#f0f4f8
 }
 /* HEADER */
 .hdr{background:var(--navy);border-bottom:4px solid var(--gold);padding:12px 16px;display:flex;align-items:center;gap:12px}
@@ -55,25 +44,25 @@ body{font-family:system-ui,sans-serif;background:#f5f5f5;color:#111}
 .hdr-r{display:flex;align-items:center;gap:8px}
 .hbtn{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);color:#fff;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit}
 /* PROGRESS */
-.prog{background:#243460;padding:10px 16px;display:flex;align-items:center;gap:0;overflow-x:auto}
+.prog{background:#004080;padding:10px 16px;display:flex;align-items:center;gap:0;overflow-x:auto}
 .sw{display:flex;align-items:center;cursor:pointer;flex-shrink:0}
 .sc{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.25);color:rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
 .sl{font-size:11px;color:rgba(255,255,255,.45);margin-left:6px;white-space:nowrap}
 .sc2{flex:1;min-width:14px;max-width:40px;height:1px;background:rgba(255,255,255,.2);margin:0 6px}
-.sw.on .sc{background:var(--gold);border-color:var(--gold);color:var(--navy)}.sw.on .sl{color:#fff;font-weight:600}
-.sw.dn .sc{background:rgba(201,168,76,.25);border-color:var(--gold);color:var(--gold)}
+.sw.on .sc{background:var(--gold);border-color:var(--gold);color:#fff}.sw.on .sl{color:#fff;font-weight:600}
+.sw.dn .sc{background:rgba(93,180,70,.2);border-color:var(--gold);color:var(--gold)}
 /* MAIN */
 main{max-width:860px;margin:0 auto;padding:20px 12px 100px}
 .card{background:#fff;border:1px solid var(--border);border-radius:4px;margin-bottom:16px;display:none}
 .card.show{display:block}
-.ch{background:var(--navy);padding:11px 18px;display:flex;align-items:center;gap:10px;border-radius:4px 4px 0 0}
+.ch{background:linear-gradient(135deg,#003366,#004080);padding:11px 18px;display:flex;align-items:center;gap:10px;border-radius:4px 4px 0 0}
 .cn{font-size:20px;font-weight:300;color:var(--gold)}.ch h2{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#fff}
 .cb{padding:20px 16px}
 /* LANG selector inside step 1 */
 .lang-box{display:flex;align-items:center;gap:8px;padding:12px 14px;background:var(--bg);border:1px solid var(--border);border-radius:4px;margin-bottom:18px}
 .lang-box span{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-right:auto}
 .lbtn{border:1.5px solid var(--border);background:#fff;color:var(--muted);font-family:inherit;font-size:12px;font-weight:700;padding:5px 12px;border-radius:3px;cursor:pointer}
-.lbtn.on{background:var(--gold);color:var(--navy);border-color:var(--gold)}
+.lbtn.on{background:var(--gold);color:#fff;border-color:var(--gold)}
 /* FIELDS */
 .fg{display:grid;grid-template-columns:1fr 1fr;gap:14px 20px;margin-bottom:0}
 .f{display:flex;flex-direction:column;gap:4px}.s2{grid-column:span 2}
@@ -96,7 +85,7 @@ textarea{resize:vertical;min-height:70px}
 .rgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:6px}
 .rc{border:2px solid var(--border);border-radius:3px;padding:13px;cursor:pointer;transition:all .15s}
 .rt{font-size:13px;font-weight:700;margin-bottom:3px}.ra{font-size:10px;color:var(--muted)}
-.rc.s-ok{border-color:var(--green);background:#edf7f1}.rc.s-ok .rt{color:var(--green)}
+.rc.s-ok{border-color:#5DB446;background:#f0faf0}.rc.s-ok .rt{color:#3d8a2e}
 .rc.s-sec{border-color:#9a6f1a;background:#fdf9f0}.rc.s-sec .rt{color:#9a6f1a}
 .rc.s-maj{border-color:var(--red);background:#fff0ef}.rc.s-maj .rt{color:var(--red)}
 .rc.cerr{border-color:var(--red)}
@@ -746,8 +735,8 @@ function buildPDF() {
   var W=210, H=297, ML=12, CW=186;
 
   // Header bar
-  doc.setFillColor(26,39,68); doc.rect(0,0,W,28,"F");
-  doc.setFillColor(201,168,76); doc.rect(0,28,W,1.5,"F");
+  doc.setFillColor(0,51,102); doc.rect(0,0,W,28,"F");
+  doc.setFillColor(93,180,70); doc.rect(0,28,W,2,"F");
   doc.addImage(LOGO_DATA, LOGO_FMT, ML, 3, 60, 22);
   doc.setFont("helvetica","bold"); doc.setFontSize(13); doc.setTextColor(255,255,255);
   doc.text(T("app"), W-12, 10, {align:"right"});
@@ -1008,5 +997,3 @@ el("datesign").valueAsDate = new Date();
 </script>
 </body>
 </html>
-protocole_reception.html
-Affichage de protocole_reception.html en cours...
